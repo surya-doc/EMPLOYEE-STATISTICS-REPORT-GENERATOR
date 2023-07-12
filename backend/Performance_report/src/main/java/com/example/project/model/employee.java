@@ -1,5 +1,4 @@
 package com.example.project.model;
 
-public class Employee {
-	
+public class employee {
 }
