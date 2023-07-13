@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PerformanceReportApplication {
+public class EmployeePerformanceReportApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PerformanceReportApplication.class, args);
+		SpringApplication.run(EmployeePerformanceReportApplication.class, args);
 	}
 
 }

@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>performance_report</artifactId>
+	<artifactId>employee_performance_report</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>performance_report</name>
+	<name>employee_performance_report</name>
 	<description>Employee Performance Report Generator Spring Boot Project</description>
 	<properties>
 		<java.version>17</java.version>
