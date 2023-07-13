@@ -97,4 +97,32 @@ public class MentorFeedback {
   public void setExtrawork(Integer extrawork) {
     this.extrawork = extrawork;
   }
+
+public MentorFeedback(Integer empid, Integer mentorid, Integer teamid, Integer communication, Integer behaviour,
+		Integer responsibility, Integer deadline, Integer workload, Integer extrawork) {
+	super();
+	this.empid = empid;
+	this.mentorid = mentorid;
+	this.teamid = teamid;
+	this.communication = communication;
+	this.behaviour = behaviour;
+	this.responsibility = responsibility;
+	this.deadline = deadline;
+	this.workload = workload;
+	this.extrawork = extrawork;
+}
+
+public MentorFeedback() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+
+@Override
+public String toString() {
+	return "MentorFeedback [empid=" + empid + ", mentorid=" + mentorid + ", teamid=" + teamid + ", communication="
+			+ communication + ", behaviour=" + behaviour + ", responsibility=" + responsibility + ", deadline="
+			+ deadline + ", workload=" + workload + ", extrawork=" + extrawork + "]";
+}
+  
+  
 }
