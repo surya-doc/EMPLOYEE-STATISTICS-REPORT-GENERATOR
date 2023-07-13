@@ -57,4 +57,26 @@ public class Employee {
   public void setTotal_working_days(String total_working_days) {
     this.total_working_days = total_working_days;
   }
+
+  public Employee(Integer empid, String role, Boolean status, Integer teamid, String total_working_days) {
+		super();
+		this.empid = empid;
+		this.role = role;
+		this.status = status;
+		this.teamid = teamid;
+		this.total_working_days = total_working_days;
+	}
+
+	public Employee() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [empid=" + empid + ", role=" + role + ", status=" + status + ", teamid=" + teamid
+				+ ", total_working_days=" + total_working_days + "]";
+	}
+  
+	
 }
