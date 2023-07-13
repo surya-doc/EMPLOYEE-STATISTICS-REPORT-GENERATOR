@@ -57,4 +57,28 @@ public class Hr {
   public void setStatus(Boolean status) {
     this.status = status;
   }
+
+	public Hr(Integer hrid, String name, String email, String password, Boolean status) {
+		super();
+		this.hrid = hrid;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.status = status;
+	}
+
+	public Hr() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "Hr [hrid=" + hrid + ", name=" + name + ", email=" + email + ", password=" + password + ", status="
+				+ status + "]";
+	}
+	
+	
+	  	
+  	
 }

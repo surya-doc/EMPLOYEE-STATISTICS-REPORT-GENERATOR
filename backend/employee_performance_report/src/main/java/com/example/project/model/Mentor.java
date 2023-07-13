@@ -67,4 +67,26 @@ public class Mentor {
   public void setStatus(boolean status) {
     this.status = status;
   }
+
+public Mentor(Integer mentorid, String name, String email, String password, Integer teamid, boolean status) {
+	super();
+	this.mentorid = mentorid;
+	this.name = name;
+	this.email = email;
+	this.password = password;
+	this.teamid = teamid;
+	this.status = status;
+}
+
+public Mentor() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+
+@Override
+public String toString() {
+	return "Mentor [mentorid=" + mentorid + ", name=" + name + ", email=" + email + ", password=" + password
+			+ ", teamid=" + teamid + ", status=" + status + "]";
+}
+
 }

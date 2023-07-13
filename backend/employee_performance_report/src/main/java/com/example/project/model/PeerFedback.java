@@ -57,4 +57,25 @@ public class PeerFedback {
   public void setResponsibility(Integer responsibility) {
     this.responsibility = responsibility;
   }
+
+public PeerFedback() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+
+public PeerFedback(Integer empid, Integer teamid, Integer communication, Integer behaviour, Integer responsibility) {
+	super();
+	this.empid = empid;
+	this.teamid = teamid;
+	this.communication = communication;
+	this.behaviour = behaviour;
+	this.responsibility = responsibility;
+}
+
+@Override
+public String toString() {
+	return "PeerFedback [empid=" + empid + ", teamid=" + teamid + ", communication=" + communication + ", behaviour="
+			+ behaviour + ", responsibility=" + responsibility + "]";
+}
+  
 }

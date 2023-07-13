@@ -57,4 +57,26 @@ public class HrFeedback {
   public void setExtraactivity(Integer extraactivity) {
     this.extraactivity = extraactivity;
   }
+
+	public HrFeedback(Integer empid, Integer hrid, Integer communication, Integer behaviour, Integer extraactivity) {
+		super();
+		this.empid = empid;
+		this.hrid = hrid;
+		this.communication = communication;
+		this.behaviour = behaviour;
+		this.extraactivity = extraactivity;
+	}
+
+	public HrFeedback() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "HrFeedback [empid=" + empid + ", hrid=" + hrid + ", communication=" + communication + ", behaviour="
+				+ behaviour + ", extraactivity=" + extraactivity + "]";
+	}
+	
+	
 }

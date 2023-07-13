@@ -77,4 +77,30 @@ public class EmployeeDetails {
   public void setTeamid(Integer teamid) {
     this.teamid = teamid;
   }
+
+	public EmployeeDetails(Integer empid, String name, String email, String password, boolean status, Integer attendance,
+			Integer teamid) {
+		super();
+		this.empid = empid;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.status = status;
+		this.attendance = attendance;
+		this.teamid = teamid;
+	}
+
+	public EmployeeDetails() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "EmployeeDetails [empid=" + empid + ", name=" + name + ", email=" + email + ", password=" + password
+				+ ", status=" + status + ", attendance=" + attendance + ", teamid=" + teamid + "]";
+	}
+	
+	
+  	
 }
