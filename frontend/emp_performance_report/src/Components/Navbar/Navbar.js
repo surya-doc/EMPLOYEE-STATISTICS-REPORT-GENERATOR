@@ -6,6 +6,21 @@ function Navbar() {
   const[stat, setStat] = useState(false);
 
   const navigate = useNavigate();
+
+  function checkFeedbacker(){
+    const type = localStorage.getItem('feedbacker');
+    console.log("type");
+    if(type === "member"){
+      navigate("/peerfeedback");
+    }
+    else if(type === "mentor"){
+      navigate("/mentorfeedback")
+    }
+    else{
+      navigate("/hrfeedback");
+    }
+  }
+
   return (
     <div className='navbar flex justify-between py-4 px-8 shadow-lg'>
       <div className='left text-xl cursor-pointer' onClick={() => navigate('/')}>StatMaster</div>
@@ -24,7 +39,7 @@ function Navbar() {
             <div className='py-2 hover:bg-[#F3F3F3] px-2 cursor-pointer' onClick={() => navigate('/signup/hr')}>Signup as HR</div>
           </div>
         </div>
-        <div className='feedback cursor-pointer hover:text-[#A62868]' onClick={() => navigate('/feedbackoptions')}>
+        <div className='feedback cursor-pointer hover:text-[#A62868]' onClick={() => checkFeedbacker()}>
           Feedback
         </div>
       </div>
