@@ -28,7 +28,7 @@ function EmployeeCard({employee}) {
                 <div className='flex items-center gap-2'>
                     <h5>Attendance</h5>
                     <p>{employee.attendance}</p>
-                </div>
+                </div> 
             </div>
         </div>
     </div>

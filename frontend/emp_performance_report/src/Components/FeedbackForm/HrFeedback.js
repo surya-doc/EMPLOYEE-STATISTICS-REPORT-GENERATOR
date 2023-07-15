@@ -67,6 +67,7 @@ function HrFeedback() {
                   <option value="option3">5</option>
                 </select>
             </div>
+            <button type='submit' className='text-sm bg-[#A62868] w-20 py-1 text-[#FFF] rounded-sm mx-auto'>Submit</button>
           </form>
 
         </div>

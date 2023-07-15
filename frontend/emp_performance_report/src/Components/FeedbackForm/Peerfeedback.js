@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import Navbar from '../Navbar/Navbar'
 import './FeedbackOptions.css'
+import { useLocation } from 'react-router';
 
 function Peerfeedback() {  
   const [communication, setCommunication] = useState('');
   const [behaviour, setBehaviour] = useState('');
   const [responsibility, setResponsibility] = useState('');
+
+  const location = useLocation();
+  console.log(location);
 
 
   const giveCommunicationRating = (event) => {
@@ -23,16 +27,16 @@ function Peerfeedback() {
       <div className="feedbackform w-3/5 flex justify-center items-center mx-auto my-14">
         <div className='w-full relative'>
           <img className='absolute left-0 right-0' style={{zIndex: -1}} src="/feedback.png" alt="" />
-          <form className='min-h-[82vh] shadow-2xl px-10 flex flex-col justify-center gap-4' style={{backgroundColor: "rgba(255, 255, 255, 0.7"}} action="">
+          <form className='min-h-[82vh] shadow-2xl px-10 flex flex-col justify-center gap-4' style={{backgroundColor: "rgba(255, 255, 255, 0.8"}} action="">
             <h1 className='text-center pb-4 text-2xl font-semibold'>Peer's feedback</h1>
             <div className="feedbacker_name border-b-[1px] pb-2 my-4">
               <p className='pl-1'>Feedbacker's Name</p>
             </div>
             <div className="peername border-b-[1px] pb-2 my-4">
-              <p className='pl-1'>Peer name</p>
+              <p className='pl-1'>{location.state.name}</p>
             </div>
             <div className="peerid border-b-[1px] pb-2 my-4">
-              <p className='pl-1'>peer id</p>
+              <p className='pl-1'>{location.state.empid}</p>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis of communication between 1 to 5">
             {/* <p></p> */}
@@ -67,6 +71,7 @@ function Peerfeedback() {
                   <option value="option3">5</option>
                 </select>
             </div>
+            <button type='submit' className='text-sm bg-[#A62868] w-20 py-1 text-[#FFF] rounded-sm mx-auto'>Submit</button>
           </form>
 
         </div>

@@ -20,7 +20,7 @@ function CrossMentorFeedback() {
   const giveResponsibilityRating = (event) => {
     setResponsibility(event.target.value);
   };
-  
+
   return (
     <div className="CrossMentorFeedback">
       <Navbar />
@@ -74,6 +74,7 @@ function CrossMentorFeedback() {
                   <option value="option3">5</option>
                 </select>
             </div>
+            <button type='submit' className='text-sm bg-[#A62868] w-20 py-1 text-[#FFF] rounded-sm mx-auto'>Submit</button>
           </form>
 
         </div>
