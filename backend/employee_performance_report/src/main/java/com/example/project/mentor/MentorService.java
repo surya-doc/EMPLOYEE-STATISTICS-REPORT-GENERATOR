@@ -29,4 +29,9 @@ public class MentorService {
     public void deleteMentor(Integer id){
         mentorRepository.deleteById(id);
     }
+
+    public Mentor getMentorByTeam(int id) {
+        List<Mentor> mentor=this.mentorRepository.getMentorByTeam(id);
+        return mentor.get(0);
+    }
 }

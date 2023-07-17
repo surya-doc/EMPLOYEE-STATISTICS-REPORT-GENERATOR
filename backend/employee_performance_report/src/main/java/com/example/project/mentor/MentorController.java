@@ -36,4 +36,7 @@ public class MentorController {
   public void deleteMentor(@PathVariable Integer id){
     this.mentorService.deleteMentor(id);
   }
+
+  @GetMapping("/byteam/{id}")
+  public Mentor getMentorByTeam(@PathVariable int id) { return this.mentorService.getMentorByTeam(id);  }
 }
