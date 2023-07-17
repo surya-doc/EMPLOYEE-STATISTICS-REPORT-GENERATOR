@@ -7,6 +7,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/team")
+@CrossOrigin("*")
 public class TeamController {
   @Autowired
   private TeamService teamService;

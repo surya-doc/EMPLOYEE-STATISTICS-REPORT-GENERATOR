@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/login")
-public class LoginConstructor {
+@CrossOrigin("*")
+public class LoginController {
     @Autowired
     private LoginService loginService;
 

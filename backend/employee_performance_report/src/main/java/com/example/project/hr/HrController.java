@@ -7,6 +7,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/hr")
+@CrossOrigin("*")
 public class HrController {
 	@Autowired
 	private HrService hrService;
