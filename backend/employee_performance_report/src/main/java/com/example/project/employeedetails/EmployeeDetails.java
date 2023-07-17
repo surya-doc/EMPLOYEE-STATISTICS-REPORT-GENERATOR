@@ -4,103 +4,110 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity
+@Entity(name = "employeeDetails")
 @Table(name = "employeeDetails")
 public class EmployeeDetails {
-  @Id
-  private Integer empid;
+    @Id
+    private Integer empid;
 
-  private String name;
+    private String name;
 
-  private String email;
+    private String email;
 
-  private String address;
+    private String password;
 
-  private boolean status;
+    private String address;
 
-  private Integer attendance;
+    private boolean status;
 
-  private Integer teamid;
+    private Integer attendance;
 
-  public Integer getEmpid() {
-    return this.empid;
-  }
+    private Integer teamid;
 
-  public String getName() {
-    return this.name;
-  }
+    public EmployeeDetails(Integer empid, String name, String email, String password, String address, boolean status, Integer attendance, Integer teamid) {
+        this.empid = empid;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.status = status;
+        this.attendance = attendance;
+        this.teamid = teamid;
+    }
 
-  public String getEmail() {
-    return this.email;
-  }
+    public Integer getEmpid() {
+        return this.empid;
+    }
 
-  public String getAddress() {
-    return this.address;
-  }
+    public String getName() {
+        return this.name;
+    }
 
-  public boolean isStatus() {
-    return this.status;
-  }
+    public String getEmail() {
+        return this.email;
+    }
 
-  public Integer getAttendance() {
-    return this.attendance;
-  }
+    public String getAddress() {
+        return this.address;
+    }
 
-  public Integer getTeamid() {
-    return this.teamid;
-  }
+    public boolean isStatus() {
+        return this.status;
+    }
 
-  public void setEmpid(Integer empid) {
-    this.empid = empid;
-  }
+    public Integer getAttendance() {
+        return this.attendance;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public Integer getTeamid() {
+        return this.teamid;
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    public void setEmpid(Integer empid) {
+        this.empid = empid;
+    }
 
-  public void setAddress(String address) {
-    this.address = address;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setStatus(boolean status) {
-    this.status = status;
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-  public void setAttendance(Integer attendance) {
-    this.attendance = attendance;
-  }
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-  public void setTeamid(Integer teamid) {
-    this.teamid = teamid;
-  }
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
-	public EmployeeDetails(Integer empid, String name, String email, String address, boolean status, Integer attendance,
-			Integer teamid) {
-		super();
-		this.empid = empid;
-		this.name = name;
-		this.email = email;
-		this.address = address;
-		this.status = status;
-		this.attendance = attendance;
-		this.teamid = teamid;
-	}
+    public void setAttendance(Integer attendance) {
+        this.attendance = attendance;
+    }
 
-	public EmployeeDetails() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    public void setTeamid(Integer teamid) {
+        this.teamid = teamid;
+    }
 
-	@Override
-	public String toString() {
-		return "EmployeeDetails [empid=" + empid + ", name=" + name + ", email=" + email + ", address=" + address
-				+ ", status=" + status + ", attendance=" + attendance + ", teamid=" + teamid + "]";
-	}
-	
-	
-  	
+    public EmployeeDetails() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeDetails [empid=" + empid + ", name=" + name + ", email=" + email + ", password=" + password + ", address=" + address
+                + ", status=" + status + ", attendance=" + attendance + ", teamid=" + teamid + "]";
+    }
+
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

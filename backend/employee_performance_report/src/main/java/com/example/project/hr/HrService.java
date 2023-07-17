@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class HrService {
     @Autowired
-    private HrRepoitory hrRepository;
+    private HrRepository hrRepository;
     public List<Hr> getAllHr()
     {
         return this.hrRepository.findAll();
