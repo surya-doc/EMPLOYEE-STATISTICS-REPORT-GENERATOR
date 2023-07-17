@@ -1,8 +1,11 @@
 package com.example.project.employeedetails;
 
 
+import com.example.project.employee.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/employeeDetail")
@@ -35,4 +38,8 @@ public class EmployeeDetailsController {
 	{
 		this.employeeDetailsService.deleteEmployeeDetailsById(id);
 	}
+
+	@GetMapping("/byteam/{teamid}")
+	public List<EmployeeDetails> getEmployeeByTeam(@PathVariable int teamid) {	return this.employeeDetailsService.getEmployeeByTeam(teamid);	}
+
 }
