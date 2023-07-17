@@ -7,6 +7,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/mentors")
+@CrossOrigin("*")
 public class MentorController {
   @Autowired
   private MentorService mentorService;

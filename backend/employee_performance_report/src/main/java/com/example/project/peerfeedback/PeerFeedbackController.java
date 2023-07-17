@@ -7,6 +7,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/peerFeedback")
+@CrossOrigin("*")
 public class PeerFeedbackController {
   @Autowired
   private PeerFeedbackService peerFeedbackService;
