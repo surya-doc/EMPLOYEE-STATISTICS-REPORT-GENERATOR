@@ -1,6 +1,8 @@
 package com.example.project.peerfeedback;
 
+import com.example.project.exception.ResoruceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,17 +15,17 @@ public class PeerFeedbackController {
   private PeerFeedbackService peerFeedbackService;
 
   @GetMapping("/{empid}")
-  private List<PeerFedback>getPeerFeedbackOfAnEmployee(@PathVariable Integer empid){
+  private ResponseEntity<List<PeerFedback>> getPeerFeedbackOfAnEmployee(@PathVariable Integer empid) throws ResoruceNotFoundException {
     return this.peerFeedbackService.getPeerFeedbackByID(empid);
   }
 
   @PostMapping("/create")
-  public void addPeerFeedback(@RequestBody PeerFedback peerFedback){
-    this.peerFeedbackService.addPeerFeedback(peerFedback);
+  public ResponseEntity<String> addPeerFeedback(@RequestBody PeerFedback peerFedback) throws ResoruceNotFoundException {
+    return this.peerFeedbackService.addPeerFeedback(peerFedback);
   }
 
   @PutMapping("/update")
-  public void updatePeerFeedback(@RequestBody PeerFedback peerFedback){
-    this.peerFeedbackService.updatePeerFeedback(peerFedback);
+  public ResponseEntity<String> updatePeerFeedback(@RequestBody PeerFedback peerFedback) throws ResoruceNotFoundException {
+    return this.peerFeedbackService.updatePeerFeedback(peerFedback);
   }
 }

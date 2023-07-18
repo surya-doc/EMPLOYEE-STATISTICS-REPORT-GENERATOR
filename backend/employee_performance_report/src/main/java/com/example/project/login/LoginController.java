@@ -1,6 +1,8 @@
 package com.example.project.login;
 
+import com.example.project.exception.ResoruceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,14 +13,10 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("")
-    public Profile getProfile(@RequestBody LoginInfo loginInfo)
-    {
+    public ResponseEntity<Profile> getProfile(@RequestBody LoginInfo loginInfo) throws ResoruceNotFoundException {
         String name=loginInfo.getEmail();
         String password=loginInfo.getPassword();
         String type=loginInfo.getType();
-//        System.out.println(name);
-//        System.out.println(password);
-//        System.out.println(type);
         return this.loginService.getProfile(name,password,type);
     }
 }
