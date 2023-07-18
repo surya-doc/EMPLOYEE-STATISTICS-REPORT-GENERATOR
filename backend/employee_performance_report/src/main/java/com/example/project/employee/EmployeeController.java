@@ -1,6 +1,8 @@
 package com.example.project.employee;
 
+import com.example.project.exception.ResoruceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,28 +19,26 @@ public class EmployeeController {
 	{
 		return this.employeeService.getAllEmployees();
 	}
-	
+
 	@GetMapping("/{id}")
-	public Employee getEmployeeById(@PathVariable int id) {	return this.employeeService.getEmployeeById(id);	}
-	
+	public ResponseEntity<Employee> getEmployeeById(@PathVariable int id) throws ResoruceNotFoundException {	return this.employeeService.getEmployeeById(id);	}
+
+
 	@PostMapping("/create")
-	public void createEmployee(@RequestBody Employee employee)
-	{
-		this.employeeService.createEmployee(employee);
+	public ResponseEntity<String> createEmployee(@RequestBody Employee employee) throws ResoruceNotFoundException {
+		return this.employeeService.createEmployee(employee);
 	}
 	
 	@PutMapping("/update")
-	public void updateEmployeeById(@RequestBody Employee employee)
-	{
-		this.employeeService.updateEmployeeById(employee);
+	public ResponseEntity<String> updateEmployeeById(@RequestBody Employee employee) throws ResoruceNotFoundException {
+		return this.employeeService.updateEmployeeById(employee);
 	}
 
 	@GetMapping("/byteam/{teamid}")
-	public List<Employee> getEmployeeByTeam(@PathVariable int teamid) {	return this.employeeService.getEmployeeByTeam(teamid);	}
+	public ResponseEntity<List<Employee>> getEmployeeByTeam(@PathVariable int teamid) throws ResoruceNotFoundException {	return this.employeeService.getEmployeeByTeam(teamid);	}
 
 	@DeleteMapping("/delete/{id}")
-	public void deleteEmployeeById(@PathVariable int id)
-	{
-		this.employeeService.deleteEmployeeById(id);
+	public ResponseEntity<String> deleteEmployeeById(@PathVariable int id) throws ResoruceNotFoundException {
+		return this.employeeService.deleteEmployeeById(id);
 	}
 }

@@ -1,6 +1,8 @@
 package com.example.project.team;
 
+import com.example.project.exception.ResoruceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,17 +21,16 @@ public class TeamController {
   }
 
   @GetMapping("/{id}")
-  public Team getTeamById(@PathVariable int id)
-  {
+  public ResponseEntity<Team> getTeamById(@PathVariable int id) throws ResoruceNotFoundException {
     return this.teamService.getTeamById(id);
   }
   @PostMapping("/create")
-  public void addTeam(@RequestBody Team team){
-    this.teamService.addTeam(team);
+  public ResponseEntity<String> addTeam(@RequestBody Team team) throws ResoruceNotFoundException {
+    return this.teamService.addTeam(team);
   }
 
   @PutMapping("/update")
-  public void updateTeam(@RequestBody Team team){
-    this.teamService.updateTeam(team);
+  public ResponseEntity<String> updateTeam(@RequestBody Team team) throws ResoruceNotFoundException {
+    return this.teamService.updateTeam(team);
   }
 }

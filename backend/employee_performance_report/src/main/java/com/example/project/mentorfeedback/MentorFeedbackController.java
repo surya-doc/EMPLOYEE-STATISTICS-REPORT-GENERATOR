@@ -1,9 +1,9 @@
 package com.example.project.mentorfeedback;
 
+import com.example.project.exception.ResoruceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/mentorFeedback")
@@ -13,17 +13,17 @@ public class MentorFeedbackController {
   private MentorFeedbackService mentorFeedbackService;
 
   @GetMapping("/{empid}")
-  public MentorFeedback getMentorFeedbackOfAnEmployee(@PathVariable Integer empid){
+  public ResponseEntity<MentorFeedback> getMentorFeedbackOfAnEmployee(@PathVariable Integer empid) throws ResoruceNotFoundException {
     return mentorFeedbackService.getMentorFeedbackOfAnEmployee(empid);
   }
 
   @PostMapping("/create")
-  public void addMentorFeedbackForEmployee(@RequestBody MentorFeedback mentorFeedback){
-    this.mentorFeedbackService.addMentorFeedbackForEmployee(mentorFeedback);
+  public ResponseEntity<String> addMentorFeedbackForEmployee(@RequestBody MentorFeedback mentorFeedback) throws ResoruceNotFoundException {
+    return this.mentorFeedbackService.addMentorFeedbackForEmployee(mentorFeedback);
   }
 
   @PutMapping("/update")
-  public void updateMentorFeedback(@RequestBody MentorFeedback mentorFeedback){
-    this.mentorFeedbackService.updateMentorFeedback(mentorFeedback);
+  public ResponseEntity<String> updateMentorFeedback(@RequestBody MentorFeedback mentorFeedback) throws ResoruceNotFoundException {
+    return this.mentorFeedbackService.updateMentorFeedback(mentorFeedback);
   }
 }

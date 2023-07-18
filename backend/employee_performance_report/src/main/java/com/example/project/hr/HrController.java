@@ -1,6 +1,8 @@
 package com.example.project.hr;
 
+import com.example.project.exception.ResoruceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,26 +21,22 @@ public class HrController {
 	}
 	
 	@GetMapping("/{id}")
-	public Hr getHrById(@PathVariable int id)
-	{
+	public ResponseEntity<Hr> getHrById(@PathVariable int id) throws ResoruceNotFoundException {
 		return this.hrService.getHrById(id);
 	}
 	
 	@PostMapping("/create")
-	public void createHr(@RequestBody Hr hr)
-	{
-		this.hrService.createHr(hr);
+	public ResponseEntity<String> createHr(@RequestBody Hr hr) throws ResoruceNotFoundException {
+		return this.hrService.createHr(hr);
 	}
 	
 	@PutMapping("/update")
-	public void updateHrById(@RequestBody Hr hr)
-	{
-		this.hrService.updateHrById(hr);
+	public ResponseEntity<String> updateHrById(@RequestBody Hr hr) throws ResoruceNotFoundException {
+		return this.hrService.updateHrById(hr);
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public void deleteHrById(@PathVariable int id)
-	{
-		this.hrService.deleteHrById(id);
+	public ResponseEntity<String> deleteHrById(@PathVariable int id) throws ResoruceNotFoundException {
+		return this.hrService.deleteHrById(id);
 	}
 }

@@ -11,4 +11,7 @@ public interface PeerFeedbackRepository extends JpaRepository<PeerFedback, Integ
 
     @Query("Select emp from employee emp where emp.empid = ?1")
     public List<PeerFedback> getPeerFeedbackOfAnEmployee(int id);
+
+    @Query("Select emp from employee emp where emp.empid = ?1 and emp.peerid = ?2")
+    public List<PeerFedback> getonefeedback(int empid,int peerid);
 }

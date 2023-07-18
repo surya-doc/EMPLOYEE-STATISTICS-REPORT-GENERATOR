@@ -1,6 +1,8 @@
 package com.example.project.mentor;
 
+import com.example.project.exception.ResoruceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,25 +20,25 @@ public class MentorController {
   }
 
   @GetMapping("/{id}")
-  public Mentor getMentorById(@PathVariable Integer id){
+  public ResponseEntity<Mentor> getMentorById(@PathVariable Integer id) throws ResoruceNotFoundException {
     return mentorService.getMentorById(id);
   }
 
   @PostMapping("/create")
-  public void addMentor(@RequestBody Mentor mentor){
-    this.mentorService.addMentor(mentor);
+  public ResponseEntity<String> addMentor(@RequestBody Mentor mentor) throws ResoruceNotFoundException {
+    return this.mentorService.addMentor(mentor);
   }
 
   @PutMapping("/update")
-  public void updateMentor(@RequestBody Mentor mentor){
-    this.mentorService.updateMentor(mentor);
+  public ResponseEntity<String> updateMentor(@RequestBody Mentor mentor) throws ResoruceNotFoundException {
+    return this.mentorService.updateMentor(mentor);
   }
 
   @DeleteMapping("/delete/{id}")
-  public void deleteMentor(@PathVariable Integer id){
-    this.mentorService.deleteMentor(id);
+  public ResponseEntity<String> deleteMentor(@PathVariable Integer id) throws ResoruceNotFoundException {
+    return this.mentorService.deleteMentor(id);
   }
 
   @GetMapping("/byteam/{id}")
-  public Mentor getMentorByTeam(@PathVariable int id) { return this.mentorService.getMentorByTeam(id);  }
+  public ResponseEntity<Mentor> getMentorByTeam(@PathVariable int id) throws ResoruceNotFoundException { return this.mentorService.getMentorByTeam(id);  }
 }

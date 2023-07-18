@@ -1,8 +1,9 @@
 package com.example.project.employeedetails;
 
 
-import com.example.project.employee.Employee;
+import com.example.project.exception.ResoruceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,30 +17,30 @@ public class EmployeeDetailsController {
 	
 	
 	@GetMapping("/{id}")
-	public EmployeeDetails getEmployeeDetailById(@PathVariable int id)
-	{
+	public ResponseEntity<EmployeeDetails> getEmployeeDetailById(@PathVariable int id) throws ResoruceNotFoundException {
 		return this.employeeDetailsService.getEmployeeDetailsById(id);
 	}
 	
 	@PostMapping("/create")
-	public void createEmployeeDetail(@RequestBody EmployeeDetails employeeDetails)
-	{
-		this.employeeDetailsService.createEmployeeDetails(employeeDetails);
+	public ResponseEntity<String> createEmployeeDetail(@RequestBody EmployeeDetails employeeDetails) throws ResoruceNotFoundException {
+		return this.employeeDetailsService.createEmployeeDetails(employeeDetails);
 	}
 	
 	@PutMapping("/update")
-	public void updateEmployeeDetailsById(@RequestBody EmployeeDetails employeeDetails)
-	{
-		this.employeeDetailsService.updateEmployeeDetailsById(employeeDetails);
+	public ResponseEntity<String> updateEmployeeDetailsById(@RequestBody EmployeeDetails employeeDetails) throws ResoruceNotFoundException {
+		return this.employeeDetailsService.updateEmployeeDetailsById(employeeDetails);
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public void deleteEmployeeDetailsById(@PathVariable int id)
+	public ResponseEntity<String>  deleteEmployeeDetailsById(@PathVariable int id) throws ResoruceNotFoundException
 	{
-		this.employeeDetailsService.deleteEmployeeDetailsById(id);
+		return this.employeeDetailsService.deleteEmployeeDetailsById(id);
 	}
 
 	@GetMapping("/byteam/{teamid}")
-	public List<EmployeeDetails> getEmployeeByTeam(@PathVariable int teamid) {	return this.employeeDetailsService.getEmployeeByTeam(teamid);	}
+	public ResponseEntity<List<EmployeeDetails>> getEmployeeByTeam(@PathVariable int teamid) throws ResoruceNotFoundException
+	{
+		return this.employeeDetailsService.getEmployeeByTeam(teamid);
+	}
 
 }
