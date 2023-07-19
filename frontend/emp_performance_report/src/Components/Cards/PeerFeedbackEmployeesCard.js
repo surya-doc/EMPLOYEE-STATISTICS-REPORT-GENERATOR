@@ -1,8 +1,9 @@
 import React from 'react'
 import { useNavigate } from 'react-router'
 
-function PeerFeedbackEmployeesCard({employee}) {
+function PeerFeedbackEmployeesCard({employee, feedbacker}) {
     const navigate = useNavigate();
+    console.log(feedbacker);
   return (
     <div className="peerfeedbackemployees flex items-center border-[1px] w-[60vw] my-4 shadow-lg cursor-pointer rounded-md py-4 pl-10">
     <div className="nameLogo bg-[#E6E6E6] text-[2rem] font-bold w-16 h-16 py-4 flex items-center justify-center px-8">{employee.name.substring(0, 2)}
@@ -20,7 +21,7 @@ function PeerFeedbackEmployeesCard({employee}) {
             <div className='flex items-center gap-2'>
                 <h5>Email: </h5>
                 <p>{employee.email}</p>
-            </div>            
+            </div>
             <div className='flex items-center gap-2 py-2'>
                 <h5>Team: </h5>
                 <p>{employee.teamid}</p>
@@ -28,10 +29,10 @@ function PeerFeedbackEmployeesCard({employee}) {
         </div>
         <div className='justify-end'>
             <div className='flex items-center gap-2'>
-                <h5>Attendance</h5>
+                <h5>Attendance: </h5>
                 <p>{employee.attendance}</p>
             </div>
-            <div className="feedbact_btn bg-[#fdca0e] flex items-center justify-center py-1 mt-6 border-r-[2px] border-b-[3px] border-[#ffa500] rounded-md shadow-md" onClick={() => navigate('/feedback/peer', {state: employee})}>
+            <div className="feedbact_btn bg-[#fdca0e] flex items-center justify-center py-1 mt-6 border-r-[2px] border-b-[3px] border-[#ffa500] rounded-md shadow-md" onClick={() => navigate('/feedback/peer', {state: {employee, feedbacker}})}>
               Feedback
             </div>
         </div>

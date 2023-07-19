@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router'
 
-function MentorFeedbackMembersCard({employee, type}) {
+function MentorFeedbackMembersCard({employee, type, mentor}) {
     const navigate = useNavigate();
   return ( 
   <div className="peerfeedbackemployees flex items-center border-[1px] w-[60vw] my-4 shadow-lg cursor-pointer rounded-md py-4 pl-10">
@@ -31,7 +31,7 @@ function MentorFeedbackMembersCard({employee, type}) {
               <h5>Attendance</h5>
               <p>{employee.attendance}</p>
           </div>
-          <div className="feedbact_btn bg-[#fdca0e] flex items-center justify-center py-1 mt-6 border-r-[2px] border-b-[3px] border-[#ffa500] rounded-md shadow-md" onClick={() => navigate(`${type === "team" ? '/feedback/mentor' : '/feedback/crossmentor'}`, {state: employee})}>
+          <div className="feedbact_btn bg-[#fdca0e] flex items-center justify-center py-1 mt-6 border-r-[2px] border-b-[3px] border-[#ffa500] rounded-md shadow-md" onClick={() => navigate(`${type === "team" ? '/feedback/mentor' : '/feedback/crossmentor'}`, {state: {employee, mentor}})}>
             Feedback
           </div>
       </div>

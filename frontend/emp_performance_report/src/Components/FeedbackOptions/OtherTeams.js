@@ -1,75 +1,50 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../Navbar/Navbar'
-import PeerFeedbackEmployeesCard from '../Cards/PeerFeedbackEmployeesCard'
-import MentorFeedbackMembersCard from '../Cards/MentorFeedbackMembersCard';
+import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
 import { backend_url } from '../../BackendRoute';
+import MentorFeedbackMembersCard from '../Cards/MentorFeedbackMembersCard';
+import { useLocation } from 'react-router';
 
-var employees = [
-    {
-      empid: 1,
-      name: "John Doe",
-      email: "john.doe@example.com",
-      password: "password123",
-      status: true,
-      attendance: 90,
-      teamid: 1
-    },
-    {
-      empid: 2,
-      name: "Jane Smith",
-      email: "jane.smith@example.com",
-      password: "password456",
-      status: true,
-      attendance: 95,
-      teamid: 1
-    },
-    {
-      empid: 3,
-      name: "Mike Johnson",
-      email: "mike.johnson@example.com",
-      password: "password789",
-      status: true,
-      attendance: 85,
-      teamid: 2
-    }
-  ];
+function OtherTeams() {
 
-function MentorTeamFeedback() {
   const[employees, setEmployees] = useState([]);
   const[mentor, setMentor] = useState();
 
   const mentorId = localStorage.getItem('id');
 
-  async function getTeamDetails(teamid){
-    console.log("********************")
-    try {
-      const teamDetails = await axios.get(backend_url+'/employeeDetail/byteam/'+teamid);
-      console.log(teamDetails);
-      setEmployees(teamDetails.data)
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
+  const location = useLocation();
+  console.log(location);
+  
   async function getMentorDetails(){
     try {
-      const mentorDetails = await axios.get(backend_url+'/mentors/'+mentorId);
+      const mentorDetails = await axios.get(backend_url+'/mentors/'+location.state.mentorid);
       console.log(mentorDetails);
       setMentor(mentorDetails.data);
-      getTeamDetails(mentorDetails.data.teamid);
     } catch (error) {
       console.log(error);
     }
   }
 
+  async function getTeamDetails(){
+    console.log("********************")
+    try {
+      const teamDetails = await axios.get(backend_url+'/employeeDetail/byteam/'+location.state.teamid);
+      console.log(teamDetails);
+      setEmployees(teamDetails.data);
+      getMentorDetails();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
   useEffect(() => {
-    getMentorDetails();
+    getTeamDetails();
   }, [])
 
   return (
     <div>
-        <Navbar />
+      <Navbar />
         <div className="teamdetails flex flex-col items-center pt-6 pb-4">
             <div className="teamid font-semibold">Team id: <span className='text-base text-[#A62868] pl-4'>{mentor?.teamid}</span></div>
             <div className="teammentor font-semibold">Team mentor: <span className='text-base text-[#A62868] uppercase pl-4'>{mentor?.name}</span></div>
@@ -91,4 +66,4 @@ function MentorTeamFeedback() {
   )
 }
 
-export default MentorTeamFeedback
+export default OtherTeams

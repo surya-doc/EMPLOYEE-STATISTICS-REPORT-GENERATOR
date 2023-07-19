@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../Navbar/Navbar'
 import './Landing.css'
 import { MdKeyboardDoubleArrowDown } from 'react-icons/md'
 import EmployeeCard from '../Cards/EmployeeCard';
+import axios from 'axios';
+import { backend_url } from '../../BackendRoute';
+import { useNavigate } from 'react-router';
 
 var employees = [
   {
@@ -35,6 +38,32 @@ var employees = [
 ];
 
 function Landing() {
+  const[isHr, setIsHr] = useState(false);
+
+  const empId = localStorage.getItem('id');
+
+  const navigate = useNavigate();
+
+  async function check(){
+    try {
+      const res = await axios.get(backend_url+'/hr/'+empId);
+      console.log(res);
+      if(res.status === 200){
+        console.log("*")
+        setIsHr(true);
+      }
+    } catch (error) {
+      console.log(error);
+      if(error.response.status === 404){
+        setIsHr(false);
+      }
+    }
+  }
+
+  useEffect(() => {
+    check();
+  }, [])
+
   return (
     <div className='landing'>
         <Navbar />
@@ -42,12 +71,15 @@ function Landing() {
             <div className="left w-6/12 text-[3.2rem] border-b-1">
                 <h1 className="text-[3.2rem] border-b-1" style={{fontFamily: "sans-serif"}}>Smarter Workforce Management through Statistics</h1>
                 <p className='text-lg pt-6' style={{letterSpacing: "2px"}}>Empower Your Workforce with Dynamic Employee Statistics Reports!</p>
+                <div className={`manage ${isHr === true ? 'block' : 'hidden'}`}>
+                  <button className='text-base bg-[#A62868] py-1 px-4 text-[#FFF] rounded-2xl' onClick={() => {navigate('/manage')}}>Manage</button>
+                </div>
             </div>
             <div className="right w-4/12">
                 <img src="./landing.svg" alt="" />
             </div>
         </div>
-        <div className='divider bg-divider min-h-[1px] min-w-[80%] max-w-[80%] mx-auto mt-16 mb-4'></div>
+        <div className='divider bg-divider min-h-[1px] min-w-[80%] max-w-[86%] mx-auto mt-16 mb-4'></div>
         <div className='bg-[#E4BED1] mx-auto w-8 h-8 flex justify-center items-center rounded-full p-2 animate-bounce'>
           <a className='bg-[#D191B1] w-6 h-6 flex justify-center items-center rounded-full p-1' href="#employee">
             <MdKeyboardDoubleArrowDown className='color-[#A62868] text-[#A62868] font-bold'  />
