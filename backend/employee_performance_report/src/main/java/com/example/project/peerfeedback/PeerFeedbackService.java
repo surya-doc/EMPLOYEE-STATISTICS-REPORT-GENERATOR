@@ -41,11 +41,6 @@ public class PeerFeedbackService {
         {
             throw new ResoruceNotFoundException("feedback already given");
         }
-        Optional<Employee> emp = employeeRepository.findById(empid);
-        if(emp.isEmpty())
-        {
-            throw new ResoruceNotFoundException("invalid employee");
-        }
         Employee employee = employeeRepository.findById(empid).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +empid));
         Team team = teamRepository.findById(peerFedback.getTeamid()).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +peerFedback.getTeamid()));
         Employee peer = employeeRepository.findById(peerid).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +peerid));
@@ -61,11 +56,9 @@ public class PeerFeedbackService {
         {
             throw new ResoruceNotFoundException("feedback already given");
         }
-        Optional<Employee> emp = employeeRepository.findById(empid);
-        if(emp.isEmpty())
-        {
-            throw new ResoruceNotFoundException("invalid employee");
-        }
+        Employee employee = employeeRepository.findById(empid).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +empid));
+        Team team = teamRepository.findById(peerFedback.getTeamid()).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +peerFedback.getTeamid()));
+        Employee peer = employeeRepository.findById(peerid).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +peerid));
         this.peerFeedbackRepository.save(peerFedback);
         return ResponseEntity.ok("Feedback Updated");
     }

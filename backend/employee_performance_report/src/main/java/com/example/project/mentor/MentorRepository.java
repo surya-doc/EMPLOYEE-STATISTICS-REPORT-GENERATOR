@@ -14,6 +14,4 @@ public interface MentorRepository extends JpaRepository<Mentor, Integer> {
     @Query("Select men from mentor men where men.email=?1 and men.password=?2")
     public List<Mentor> getMentorByDetails(String email, String password);
 
-    @Query("Select men from mentor men where men.teamid=?1")
-    public List<Mentor> getMentorByTeam(int teamid);
 }

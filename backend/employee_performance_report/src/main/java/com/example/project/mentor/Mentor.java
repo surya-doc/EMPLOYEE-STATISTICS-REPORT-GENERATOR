@@ -16,7 +16,6 @@ public class Mentor {
 
   private String password;
 
-  private Integer teamid;
 
   private boolean status;
 
@@ -34,10 +33,6 @@ public class Mentor {
 
   public String getPassword() {
     return this.password;
-  }
-
-  public Integer getTeamid() {
-    return this.teamid;
   }
 
   public boolean isStatus() {
@@ -60,21 +55,16 @@ public class Mentor {
     this.password = password;
   }
 
-  public void setTeamid(Integer teamid) {
-    this.teamid = teamid;
-  }
-
   public void setStatus(boolean status) {
     this.status = status;
   }
 
-public Mentor(Integer mentorid, String name, String email, String password, Integer teamid, boolean status) {
+public Mentor(Integer mentorid, String name, String email, String password, boolean status) {
 	super();
 	this.mentorid = mentorid;
 	this.name = name;
 	this.email = email;
 	this.password = password;
-	this.teamid = teamid;
 	this.status = status;
 }
 
@@ -86,7 +76,7 @@ public Mentor() {
 @Override
 public String toString() {
 	return "Mentor [mentorid=" + mentorid + ", name=" + name + ", email=" + email + ", password=" + password
-			+ ", teamid=" + teamid + ", status=" + status + "]";
+			 + ", status=" + status + "]";
 }
 
 }
