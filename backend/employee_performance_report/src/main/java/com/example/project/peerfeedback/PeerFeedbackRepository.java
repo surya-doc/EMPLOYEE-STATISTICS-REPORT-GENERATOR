@@ -9,9 +9,9 @@ import java.util.List;
 @Repository
 public interface PeerFeedbackRepository extends JpaRepository<PeerFedback, Integer> {
 
-    @Query("Select emp from employee emp where emp.empid = ?1")
+    @Query("Select emp from peerFeedback emp where emp.empid = ?1")
     public List<PeerFedback> getPeerFeedbackOfAnEmployee(int id);
 
-    @Query("Select emp from employee emp where emp.empid = ?1 and emp.peerid = ?2")
+    @Query("Select emp from peerFeedback emp where emp.empid = ?1 and emp.peerid = ?2")
     public List<PeerFedback> getonefeedback(int empid,int peerid);
 }

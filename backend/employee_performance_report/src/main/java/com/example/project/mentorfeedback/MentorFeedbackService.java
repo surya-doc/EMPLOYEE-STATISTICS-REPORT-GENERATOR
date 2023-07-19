@@ -43,7 +43,8 @@ public class MentorFeedbackService {
             throw new ResoruceNotFoundException("Feedback Already Exists");
         }
         Employee employee = employeeRepository.findById(mentorFeedback.getEmpid()).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +mentorFeedback.getEmpid()));
-        Team team = teamRepository.findById(mentorFeedback.getTeamid()).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +mentorFeedback.getTeamid()));
+        Team team1 = teamRepository.findById(mentorFeedback.getMentorteamid()).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +mentorFeedback.getMentorteamid()));
+        Team team2 = teamRepository.findById(mentorFeedback.getEmpteamid()).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +mentorFeedback.getEmpteamid()));
         Mentor mentor = mentorRepository.findById(mentorFeedback.getMentorid()).orElseThrow(()->new ResoruceNotFoundException("Mentor doesnt exist with id :" +mentorFeedback.getMentorid()));
         this.mentorFeedbackRepository.save(mentorFeedback);
         return ResponseEntity.ok("Created Feedback");
@@ -52,6 +53,10 @@ public class MentorFeedbackService {
     public ResponseEntity<String> updateMentorFeedback(MentorFeedback mentorFeedback) throws ResoruceNotFoundException {
         int id=mentorFeedback.getEmpid();
         MentorFeedback emp= this.mentorFeedbackRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
+        Employee employee = employeeRepository.findById(mentorFeedback.getEmpid()).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +mentorFeedback.getEmpid()));
+        Team team1 = teamRepository.findById(mentorFeedback.getMentorteamid()).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +mentorFeedback.getMentorteamid()));
+        Team team2 = teamRepository.findById(mentorFeedback.getEmpteamid()).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +mentorFeedback.getEmpteamid()));
+        Mentor mentor = mentorRepository.findById(mentorFeedback.getMentorid()).orElseThrow(()->new ResoruceNotFoundException("Mentor doesnt exist with id :" +mentorFeedback.getMentorid()));
         this.mentorFeedbackRepository.save(mentorFeedback);
         return ResponseEntity.ok("Updated Feedback");
     }

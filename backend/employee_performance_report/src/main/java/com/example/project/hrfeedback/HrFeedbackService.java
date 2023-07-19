@@ -1,5 +1,7 @@
 package com.example.project.hrfeedback;
 
+import com.example.project.employee.Employee;
+import com.example.project.employee.EmployeeRepository;
 import com.example.project.employeedetails.EmployeeDetails;
 import com.example.project.employeedetails.EmployeeDetailsRepository;
 import com.example.project.exception.ResoruceNotFoundException;
@@ -17,7 +19,7 @@ public class HrFeedbackService {
     @Autowired
     private HrFeedbackRepository hrFeedbackRepository;
     @Autowired
-    private EmployeeDetailsRepository employeeDetailsRepository;
+    private EmployeeRepository employeeRepository;
     @Autowired
     private HrRepository hrRepository;
 
@@ -35,14 +37,17 @@ public class HrFeedbackService {
             throw new ResoruceNotFoundException("HrFeedback Already Exists");
         }
         int empid=hr.getEmpid();
-        EmployeeDetails employeeDetails = employeeDetailsRepository.findById(empid).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
+        Employee employeeDetails = employeeRepository.findById(empid).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
         Hr hr1 = hrRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Hr doesnt exist with id :" +id));
         this.hrFeedbackRepository.save(hr);
         return ResponseEntity.ok("Created HrFeedback");
     }
     public ResponseEntity<String> updateHrFeedbackById(HrFeedback hr) throws ResoruceNotFoundException {
-        int id=hr.getHrid();
-        HrFeedback data= this.hrFeedbackRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
+        int id=hr.getEmpid();
+        HrFeedback data= this.hrFeedbackRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Feedback doesnt exist with id :" +id));
+        int hrid=hr.getHrid();
+        Employee employeeDetails = employeeRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
+        Hr hr1 = hrRepository.findById(hrid).orElseThrow(()->new ResoruceNotFoundException("Hr doesnt exist with id :" +hrid));
         this.hrFeedbackRepository.save(hr);
         return ResponseEntity.ok("Updated HrFeedback");
     }

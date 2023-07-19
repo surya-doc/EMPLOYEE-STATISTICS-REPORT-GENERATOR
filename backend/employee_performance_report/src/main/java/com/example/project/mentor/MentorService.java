@@ -22,7 +22,7 @@ public class MentorService {
     }
 
     public ResponseEntity<Mentor> getMentorById(Integer id) throws ResoruceNotFoundException {
-        Mentor employee= this.mentorRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
+        Mentor employee= this.mentorRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Mentor doesnt exist with id :" +id));
         return ResponseEntity.ok(employee);
     }
 
@@ -34,8 +34,6 @@ public class MentorService {
         {
             throw new ResoruceNotFoundException("Mentor Already Exists");
         }
-        int teamid= mentor.getTeamid();
-        Team team=teamRepository.findById(teamid).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +teamid));
         this.mentorRepository.save(mentor);
         return ResponseEntity.ok("Created Mentor");
     }
@@ -54,11 +52,8 @@ public class MentorService {
     }
 
     public ResponseEntity<Mentor> getMentorByTeam(int id) throws ResoruceNotFoundException {
-        List<Mentor> mentor=this.mentorRepository.getMentorByTeam(id);
-        if(mentor.size()==0)
-        {
-            throw new ResoruceNotFoundException("Mentor Doesn't Exists");
-        }
-        return ResponseEntity.ok(mentor.get(0));
+        Team team=teamRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +id));
+        Mentor mentor=mentorRepository.findById(team.getMentorid()).orElseThrow(()->new ResoruceNotFoundException("Mentor doesnt exist with id :" +team.getMentorid()));
+        return ResponseEntity.ok(mentor);
     }
 }
