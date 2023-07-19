@@ -16,6 +16,10 @@ import MentorFeedbackOptions from './Components/FeedbackOptions/MentorFeedbackOp
 import MentorTeamFeedback from './Components/FeedbackOptions/MentorTeamFeedback';
 import CrossMentorTeamFeedback from './Components/FeedbackOptions/CrossMentorTeamFeedback';
 import HrFeedbackOptions from './Components/FeedbackOptions/HrFeedbackOptions';
+import TeamsFeedback from './Components/FeedbackOptions/TeamsFeedback';
+import OtherTeams from './Components/FeedbackOptions/OtherTeams';
+import Manage from './Components/Manage/Manage';
+import AddEmployee from './Components/Manage/AddEmployee';
 
 function App() {
   return (
@@ -30,11 +34,15 @@ function App() {
         <Route path='/mentorfeedback' element={<MentorFeedbackOptions />} />
         <Route path='/mentorfeedback/team' element={<MentorTeamFeedback />} />
         <Route path='/mentorfeedback/crossteam' element={<CrossMentorTeamFeedback />} />
+        <Route path='/mentorfeedback/crossteam/:crossteamid' element={<OtherTeams />} />
         <Route path='/hrfeedback' element={<HrFeedbackOptions />} />
         <Route path='/feedback/peer' element={<Peerfeedback />} />
         <Route path='/feedback/mentor' element={<MentorFeedback />} />
         <Route path='/feedback/crossmentor' element={<CrossMentorFeedback />} />
         <Route path='/feedback/hrfeedback' element={<HrFeedback />} />
+        <Route path='/hrfedback/team' element={<TeamsFeedback />} />
+        <Route path='/manage' element={<Manage />} />
+        <Route path='/manage/createmember' element={<AddEmployee />} />
       </Routes>
     </div>
   );
