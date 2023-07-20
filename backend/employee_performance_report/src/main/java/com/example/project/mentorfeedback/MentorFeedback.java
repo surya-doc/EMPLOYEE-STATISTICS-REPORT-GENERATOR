@@ -1,13 +1,13 @@
 package com.example.project.mentorfeedback;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
-@Entity
+@Entity(name = "mentorFeedback")
 @Table(name = "mentorFeedback")
 public class MentorFeedback {
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer feedbackid;
   private Integer empid;
 
   private Integer mentorid;
@@ -28,12 +28,38 @@ public class MentorFeedback {
 
   private Integer empteamid;
 
+  public MentorFeedback(Integer feedbackid, Integer empid, Integer mentorid, Integer mentorteamid, Integer communication, Integer behaviour, Integer responsibility, Integer deadline, Integer workload, Integer extrawork, Integer empteamid) {
+    this.feedbackid = feedbackid;
+    this.empid = empid;
+    this.mentorid = mentorid;
+    this.mentorteamid = mentorteamid;
+    this.communication = communication;
+    this.behaviour = behaviour;
+    this.responsibility = responsibility;
+    this.deadline = deadline;
+    this.workload = workload;
+    this.extrawork = extrawork;
+    this.empteamid = empteamid;
+  }
+
+  public MentorFeedback() {
+    super();
+  }
+
+  public Integer getFeedbackid() {
+    return this.feedbackid;
+  }
+
   public Integer getEmpid() {
     return this.empid;
   }
 
   public Integer getMentorid() {
     return this.mentorid;
+  }
+
+  public Integer getMentorteamid() {
+    return this.mentorteamid;
   }
 
   public Integer getCommunication() {
@@ -60,12 +86,24 @@ public class MentorFeedback {
     return this.extrawork;
   }
 
+  public Integer getEmpteamid() {
+    return this.empteamid;
+  }
+
+  public void setFeedbackid(Integer feedbackid) {
+    this.feedbackid = feedbackid;
+  }
+
   public void setEmpid(Integer empid) {
     this.empid = empid;
   }
 
   public void setMentorid(Integer mentorid) {
     this.mentorid = mentorid;
+  }
+
+  public void setMentorteamid(Integer mentorteamid) {
+    this.mentorteamid = mentorteamid;
   }
 
   public void setCommunication(Integer communication) {
@@ -92,47 +130,11 @@ public class MentorFeedback {
     this.extrawork = extrawork;
   }
 
-  public MentorFeedback(Integer empid, Integer mentorid, Integer mentorteamid, Integer communication, Integer behaviour,
-                        Integer responsibility, Integer deadline, Integer workload, Integer extrawork, Integer empteamid) {
-    super();
-    this.empid = empid;
-    this.mentorid = mentorid;
-    this.mentorteamid = mentorteamid;
-    this.communication = communication;
-    this.behaviour = behaviour;
-    this.responsibility = responsibility;
-    this.deadline = deadline;
-    this.workload = workload;
-    this.extrawork = extrawork;
-    this.empteamid = empteamid;
-  }
-
-  public MentorFeedback() {
-    super();
-    // TODO Auto-generated constructor stub
-  }
-
-  @Override
-  public String toString() {
-    return "MentorFeedback [empid=" + empid + ", mentorid=" + mentorid + ", mentorteamid=" + mentorteamid + ", communication="
-            + communication + ", behaviour=" + behaviour + ", responsibility=" + responsibility + ", deadline="
-            + deadline + ", workload=" + workload + ", extrawork=" + extrawork + ", empteamid=" + empteamid + "]";
-  }
-
-
-  public Integer getMentorteamid() {
-    return this.mentorteamid;
-  }
-
-  public Integer getEmpteamid() {
-    return this.empteamid;
-  }
-
-  public void setMentorteamid(Integer mentorteamid) {
-    this.mentorteamid = mentorteamid;
-  }
-
   public void setEmpteamid(Integer empteamid) {
     this.empteamid = empteamid;
+  }
+
+  public String toString() {
+    return "MentorFeedback(feedbackid=" + this.getFeedbackid() + ", empid=" + this.getEmpid() + ", mentorid=" + this.getMentorid() + ", mentorteamid=" + this.getMentorteamid() + ", communication=" + this.getCommunication() + ", behaviour=" + this.getBehaviour() + ", responsibility=" + this.getResponsibility() + ", deadline=" + this.getDeadline() + ", workload=" + this.getWorkload() + ", extrawork=" + this.getExtrawork() + ", empteamid=" + this.getEmpteamid() + ")";
   }
 }

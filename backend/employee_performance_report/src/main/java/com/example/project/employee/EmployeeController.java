@@ -34,8 +34,6 @@ public class EmployeeController {
 		return this.employeeService.updateEmployeeById(employee);
 	}
 
-	@GetMapping("/byteam/{teamid}")
-	public ResponseEntity<List<Employee>> getEmployeeByTeam(@PathVariable int teamid) throws ResoruceNotFoundException {	return this.employeeService.getEmployeeByTeam(teamid);	}
 
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<String> deleteEmployeeById(@PathVariable int id) throws ResoruceNotFoundException {

@@ -1,7 +1,11 @@
 package com.example.project.employee;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
+import com.example.project.employeedetails.EmployeeDetailsRepository;
 import com.example.project.exception.ResoruceNotFoundException;
+import com.example.project.hrfeedback.HrFeedbackRepository;
+import com.example.project.mentorfeedback.MentorFeedbackRepository;
+import com.example.project.peerfeedback.PeerFeedbackRepository;
 import com.example.project.team.Team;
 import com.example.project.team.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +21,14 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
-
+    @Autowired
+    private EmployeeDetailsRepository employeeDetailsRepository;
+    @Autowired
+    private PeerFeedbackRepository peerFeedbackRepository;
+    @Autowired
+    private HrFeedbackRepository hrFeedbackRepository;
+    @Autowired
+    private MentorFeedbackRepository mentorFeedbackRepository;
     @Autowired
     private TeamRepository teamRepository;
 
@@ -52,16 +63,13 @@ public class EmployeeService {
         return ResponseEntity.ok("Updated Employee");
     }
 
-    public ResponseEntity<List<Employee>> getEmployeeByTeam(int teamid) throws ResoruceNotFoundException
-    {
-        Team team=teamRepository.findById(teamid).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +teamid));
-        List<Employee> employeeList = this.employeeRepository.getemployeeBYTeam(teamid);
-        return ResponseEntity.ok(employeeList);
-    }
-
     public ResponseEntity<String> deleteEmployeeById(int id) throws ResoruceNotFoundException
     {
         Employee emp= this.employeeRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
+        this.peerFeedbackRepository.deletefeedback(id);
+        this.hrFeedbackRepository.deletefeedback(id);
+        this.mentorFeedbackRepository.deletefeedback(id);
+        this.employeeDetailsRepository.deleteById(id);
         this.employeeRepository.deleteById(id);
         return ResponseEntity.ok("Deleted Employee");
     }

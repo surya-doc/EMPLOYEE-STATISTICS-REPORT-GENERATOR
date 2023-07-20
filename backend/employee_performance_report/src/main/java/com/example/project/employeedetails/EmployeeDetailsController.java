@@ -1,6 +1,7 @@
 package com.example.project.employeedetails;
 
 
+import com.example.project.employee.Employee;
 import com.example.project.exception.ResoruceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import java.util.List;
 public class EmployeeDetailsController {
 	@Autowired
 	private EmployeeDetailsService employeeDetailsService;
-	
+
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<EmployeeDetails> getEmployeeDetailById(@PathVariable int id) throws ResoruceNotFoundException {
@@ -37,10 +38,15 @@ public class EmployeeDetailsController {
 		return this.employeeDetailsService.deleteEmployeeDetailsById(id);
 	}
 
-	@GetMapping("/byteam/{teamid}")
-	public ResponseEntity<List<EmployeeDetails>> getEmployeeByTeam(@PathVariable int teamid) throws ResoruceNotFoundException
+	@GetMapping("/byteam/{teamid}/{role}")
+	public ResponseEntity<List<EmployeeDetails>> getEmployeeByTeam(@PathVariable int teamid,@PathVariable String role) throws ResoruceNotFoundException
 	{
-		return this.employeeDetailsService.getEmployeeByTeam(teamid);
+		return this.employeeDetailsService.getEmployeeByTeam(teamid,role);
+	}
+
+	@GetMapping("/byrole/{role}")
+	public ResponseEntity<List<Employee>> getemployeebyrole(@PathVariable String role) throws ResoruceNotFoundException {
+		return this.employeeDetailsService.getEmployeeByRole(role);
 	}
 
 }
