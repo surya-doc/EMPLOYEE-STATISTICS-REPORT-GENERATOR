@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/hrFeedback")
 @CrossOrigin("*")
@@ -12,16 +14,16 @@ public class HrFeedbackController {
 	@Autowired
 	private HrFeedbackService hrFeedbackService;
 
-	@GetMapping("/exists/{empid}/{hrid}")
-	public ResponseEntity<String> getFeedbackDetails(@PathVariable int empid, @PathVariable int hrid) throws ResoruceNotFoundException {
-		return this.hrFeedbackService.feedbackexists(empid,hrid);
+	@GetMapping("/byempid/{empid}")
+	public ResponseEntity<List<HrFeedback>> getFeedbackofEmployee(@PathVariable int empid) throws ResoruceNotFoundException
+	{
+		return this.hrFeedbackService.getFeedbackByEmployee(empid);
+	}
+	@GetMapping("/{empid}/{hrid}")
+	public ResponseEntity<HrFeedback> getFeedbackDetails(@PathVariable int empid, @PathVariable int hrid) throws ResoruceNotFoundException {
+		return this.hrFeedbackService.getFeedbackbydetails(empid,hrid);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<HrFeedback> getHrFeedbackById(@PathVariable int id) throws ResoruceNotFoundException {
-		return this.hrFeedbackService.getHrFeedbackById(id);
-	}
-	
 	@PostMapping("/create")
 	public ResponseEntity<String> createHrFeedback(@RequestBody HrFeedback hr) throws ResoruceNotFoundException {
 		return this.hrFeedbackService.createHrFeedback(hr);

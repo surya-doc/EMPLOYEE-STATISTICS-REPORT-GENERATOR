@@ -24,6 +24,13 @@ public class TeamController {
   public ResponseEntity<Team> getTeamById(@PathVariable int id) throws ResoruceNotFoundException {
     return this.teamService.getTeamById(id);
   }
+
+  @GetMapping("/teambymentor/{teamid}")
+  public ResponseEntity<Team> gettembymentor(@PathVariable int teamid) throws ResoruceNotFoundException
+  {
+    return this.teamService.getteambymentorid(teamid);
+  }
+
   @PostMapping("/create")
   public ResponseEntity<String> addTeam(@RequestBody Team team) throws ResoruceNotFoundException {
     return this.teamService.addTeam(team);

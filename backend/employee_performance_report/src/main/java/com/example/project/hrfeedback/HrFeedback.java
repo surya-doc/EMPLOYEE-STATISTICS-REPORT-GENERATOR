@@ -1,13 +1,14 @@
 package com.example.project.hrfeedback;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity(name = "hrFeedback")
 @Table(name = "hrFeedback")
 public class HrFeedback {
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private int feedbackid;
+
   private Integer empid;
 
   private Integer hrid;

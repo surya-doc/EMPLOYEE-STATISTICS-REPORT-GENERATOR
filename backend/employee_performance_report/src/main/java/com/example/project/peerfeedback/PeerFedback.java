@@ -1,13 +1,12 @@
 package com.example.project.peerfeedback;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity(name="peerFeedback")
 @Table(name = "peerFeedback")
 public class PeerFedback {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer feedbackid;
 
     private Integer empid;
