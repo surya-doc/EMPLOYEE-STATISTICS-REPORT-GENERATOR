@@ -44,7 +44,7 @@ function Login() {
     <div className="login">
       <Navbar />
         <div className='flex justify-center items-center min-h-[94vh] flex-col'>
-        <div className='w-[80vw] h-[60vh] flex items-center shadow-lg rounded-lg' style={{ overflow: "hidden" }}>
+        <div className='w-[80vw] h-[60vh] flex items-center shadow-lg rounded-lg'>
             <div className="min-w-[40vw] bg-[red] min-h-[60vh]" style={{ position: "relative", backgroundImage: `url('./signup.png')`, backgroundSize: "cover", backgroundPosition: "center" }}>
             </div>
             <div className='w-1/2 min-h-[60vh] right-0 bg-[#FFF] py-16 px-10 shadow-md h-full' style={{float: "right"}}>

@@ -31,17 +31,20 @@ function AddEmployee() {
     getTeams();
   }, [])
 
-  async function addMentorFeedback(event){
+  async function addMember(event){
     event.preventDefault()
-    try {
-      const res = await axios.post(backend_url+'/employeeDetail/create', {empid: employeeId, name: employeeName, email: employeeEmail, password: employeePassword, address: employeeAddress, status: true, teamid: team});
-      console.log(res);
-      if(res.status === 200){
-        alert("Employee created successfully");
-        // navigate('/');
+    if(employeeId != null || employeeName != null || employeeEmail != null || employeePassword != null || employeeAddress != null || team != null){
+      try {
+        const res = await axios.post(backend_url+'/employeeDetail/create', {empid: employeeId, name: employeeName, email: employeeEmail, password: employeePassword, address: employeeAddress, status: true, teamid: team});
+        console.log(res);
+        if(res.status === 200){
+          alert("Employee created successfully");
+          // navigate('/');
+        }
+      } catch (error) {
+        console.log(error);
+        alert("Something went wrong.");
       }
-    } catch (error) {
-      console.log(error);
     }
   }
 
@@ -51,7 +54,7 @@ function AddEmployee() {
     <div className="feedbackform w-2/5 bg-[#f7e5ee] flex justify-center items-center mx-auto py-14">
       <div className='w-full relative'>
         {/* <img className='absolute left-0 right-0' style={{zIndex: -1}} src="/feedback.png" alt="" /> */}
-        <form className='min-h-[82vh] bg-[#FFF] shadow-2xl px-10 flex flex-col justify-center py-16 gap-4' style={{backgroundColor: "rgba(255, 255, 255, 1"}} onSubmit={(event) => addMentorFeedback(event)}>
+        <form className='min-h-[82vh] bg-[#FFF] shadow-2xl px-10 flex flex-col justify-center py-16 gap-4 gap-y-14' style={{backgroundColor: "rgba(255, 255, 255, 1"}} onSubmit={(event) => addMember(event)}>
             <h1 className='text-center pb-4 text-2xl uppercase' style={{letterSpacing: "1px"}}>Create new member</h1>
             <input
         className='input border-b-[1px] px-1 text-sm pb-1'
@@ -82,14 +85,15 @@ function AddEmployee() {
         onChange={(event) => setEmployeePassword(event.target.value)}
       />
       <input
-        className='input border-b-[1px] px-1 text-sm pb-1'
+        className='input border-b-[1px] px-1 text-sm pb-1 tooltip'
+        data-title="Give feedback on the basis of communication between 1 to 5"
         type="text"
         placeholder='Enter Employee Address'
         value={employeeAddress}
         onChange={(event) => setEmployeeAddress(event.target.value)}
       />          
-      <select className="input border-b-[1px] px-1 mx-auto bg-[transparent] pb-2 w-full bg-[#FFF] text-sm" required style={{outline: "none"}} value={team} onChange={(event) => setTeam(event.target.value)}>
-        <option value="">communication</option>
+      <select className="input border-b-[1px] px-1 mx-auto bg-[transparent] pb-2 bg-[#FFF] text-sm" required style={{outline: "none"}} value={team} onChange={(event) => setTeam(event.target.value)}>
+        <option value="">Teams</option>
         {
           teams?.map((team) => {
             return <option value={team.teamid}>{team.team_description}</option>
