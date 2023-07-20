@@ -71,8 +71,13 @@ function Landing() {
             <div className="left w-6/12 text-[3.2rem] border-b-1">
                 <h1 className="text-[3.2rem] border-b-1" style={{fontFamily: "sans-serif"}}>Smarter Workforce Management through Statistics</h1>
                 <p className='text-lg pt-6' style={{letterSpacing: "2px"}}>Empower Your Workforce with Dynamic Employee Statistics Reports!</p>
-                <div className={`manage ${isHr === true ? 'block' : 'hidden'}`}>
-                  <button className='text-base bg-[#A62868] py-1 px-4 text-[#FFF] rounded-2xl' onClick={() => {navigate('/manage')}}>Manage</button>
+                <div className='flex gap-6'>
+                  <div className={`manage ${isHr === true ? 'block' : 'hidden'}`}>
+                    <button className='text-base bg-[#e4bed1] border-[1px] border-[#A62868] text-[#A62868] py-1 px-4 rounded-2xl' onClick={() => {navigate('/hr/details')}}>Details</button>
+                  </div>
+                  <div className={`manage ${isHr === true ? 'block' : 'hidden'}`}>
+                    <button className='text-base bg-[#A62868] border-[1px] border-[#A62868] py-1 px-4 text-[#FFF] rounded-2xl' onClick={() => {navigate('/manage')}}>Manage</button>
+                  </div>
                 </div>
             </div>
             <div className="right w-4/12">

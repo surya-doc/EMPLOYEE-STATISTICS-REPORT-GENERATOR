@@ -5,6 +5,10 @@
     background-position: center;
 }
 
+.input{
+    margin: 0px 20px;
+}
+
 .input:focus{
     border-bottom: 1px solid #A62868;
 }

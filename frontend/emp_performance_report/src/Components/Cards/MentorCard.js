@@ -1,9 +1,10 @@
 import React from 'react'
 
-function EmployeeCard({employee}) {
+function MentorCard({mentor}) {
+    console.log(mentor);
   return (
     <div className='employeesCard flex items-center border-[1px] w-[60vw] my-4 shadow-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:scale-105 rounded-md py-4 pl-4 pr-2'>
-        <div className="nameLogo bg-[#E6E6E6] text-[2rem] font-bold w-16 h-16 py-4 flex items-center justify-center px-8">{employee.name.substring(0, 2)}
+        <div className="nameLogo bg-[#E6E6E6] text-[2rem] font-bold w-16 h-16 py-4 flex items-center justify-center px-8">{mentor.name.substring(0, 2)}
         <span class="relative flex h-3 w-3">
         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-300 opacity-75"></span>
         <span class="relative inline-flex rounded-full h-3 w-3 bg-lime-600"></span>
@@ -13,21 +14,21 @@ function EmployeeCard({employee}) {
             <div className=''>
                 <div className='flex items-center gap-2 py-2'>
                     <h5>Name: </h5>
-                    <p>{employee.name}</p>
+                    <p>{mentor.name}</p>
                 </div>
                 <div className='flex items-center gap-2'>
                     <h5>Email: </h5>
-                    <p>{employee.email}</p>
+                    <p>{mentor.email}</p>
                 </div>
             </div>
             <div className='justify-end'>
                 <div className='flex items-center gap-2 py-2'>
                     <h5>Team Id: </h5>
-                    <p>{employee.teamid}</p>
+                    <p>{mentor.teamid}</p>
                 </div>
                 <div className='flex items-center gap-2'>
-                    <h5>Attendance</h5>
-                    <p>{employee.attendance}</p>
+                    <h5>Tean Name: </h5>
+                    <p>{mentor.team_description}</p>
                 </div> 
             </div>
         </div>
@@ -35,4 +36,4 @@ function EmployeeCard({employee}) {
   )
 }
 
-export default EmployeeCard
+export default MentorCard
