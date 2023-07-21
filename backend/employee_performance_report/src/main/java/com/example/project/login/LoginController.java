@@ -12,7 +12,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @PostMapping("")
+    @PostMapping("/")
     public ResponseEntity<Profile> getProfile(@RequestBody LoginInfo loginInfo) throws ResoruceNotFoundException {
         String name=loginInfo.getEmail();
         String password=loginInfo.getPassword();
