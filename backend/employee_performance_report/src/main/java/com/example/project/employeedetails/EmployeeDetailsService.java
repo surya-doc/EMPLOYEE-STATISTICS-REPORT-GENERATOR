@@ -3,8 +3,10 @@ package com.example.project.employeedetails;
 import com.example.project.employee.Employee;
 import com.example.project.employee.EmployeeRepository;
 import com.example.project.exception.ResoruceNotFoundException;
+import com.example.project.mailsender.EmailService;
 import com.example.project.team.Team;
 import com.example.project.team.TeamRepository;
+import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,26 @@ public class EmployeeDetailsService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private final StringEncryptor stringEncryptor;
+
+//*******************************************************
+
+    public EmployeeDetailsService(EmployeeDetailsRepository employeeDetailsRepository,
+                                  TeamRepository teamRepository,
+                                  EmployeeRepository employeeRepository,
+                                  StringEncryptor stringEncryptor,
+                                  EmailService emailService
+    ) {
+        this.employeeDetailsRepository = employeeDetailsRepository;
+        this.teamRepository = teamRepository;
+        this.employeeRepository = employeeRepository;
+        this.stringEncryptor = stringEncryptor; // Initialize the StringEncryptor
+        this.emailService = emailService;
+    }
     public ResponseEntity<EmployeeDetails> getEmployeeDetailsById(int id) throws ResoruceNotFoundException
     {
         EmployeeDetails employee= this.employeeDetailsRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
@@ -32,6 +54,13 @@ public class EmployeeDetailsService {
     {
         int id = employeeDetails.getEmpid();
         Employee employee = this.employeeRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
+
+        String password = employeeDetails.getPassword();
+
+        // Encrypt the password before saving to the database
+        String encryptedPassword = stringEncryptor.encrypt(employeeDetails.getPassword());
+        employeeDetails.setPassword(encryptedPassword);
+
         Optional<EmployeeDetails> emp=this.employeeDetailsRepository.findById(id);
         System.out.println(emp);
         if(!emp.isEmpty())
@@ -39,7 +68,32 @@ public class EmployeeDetailsService {
             throw new ResoruceNotFoundException("Employee Already Exists");
         }
         int teamid=employeeDetails.getTeamid();
-        Team team = this.teamRepository.findById(teamid).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +id));
+        Team team = this.teamRepository.findById(teamid).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +teamid));
+
+        String to = employeeDetails.getEmail();
+        String subject = "Welcome to Argusoft, " + employee.getName() + "!!";
+        String body = "Dear " + employee.getName() +
+                "\n" +
+                "We are delighted to welcome you to the Argusoft team! As you begin your journey with us, we want to extend our warmest greetings and support.\n" +
+                "\n" +
+                "Below are some essential details regarding your employment:\n" +
+                "\n" +
+                "Employee ID: " + employeeDetails.getEmpid() + "\n" +
+                "Email: " + employeeDetails.getEmail() + "\n" +
+                "Password: " + password + "\n" +
+                "Team ID: " + employeeDetails.getTeamid() + "\n" +
+                "Role: " + employeeDetails.getRole() + "\n" +
+                "Address: " + employeeDetails.getAddress() + "\n" +
+                "Please make sure to keep your Employee ID and Password confidential. \n" +
+                "\n" +
+                "In case you have any questions, need assistance, or require any further information, please feel free to reach out to your supervisor or the HR department.\n" +
+                "\n" +
+                "Once again, welcome aboard, and we wish you all the best in your new role!\n" +
+                "\n" +
+                "Best regards, \n" +
+                "Team Argusoft.";
+
+        emailService.sendEmail(to, subject, body);
         this.employeeDetailsRepository.save(employeeDetails);
         return ResponseEntity.ok("Created Employee");
     }
