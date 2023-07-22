@@ -3,10 +3,14 @@ package com.example.project.employeedetails;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 @Entity(name = "employeeDetails")
 @Table(name = "employeeDetails")
-public class EmployeeDetails {
+public class EmployeeDetails implements UserDetails {
     @Id
     private Integer empid;
 
@@ -85,4 +89,35 @@ public class EmployeeDetails {
     public String toString() {
         return "EmployeeDetails(empid=" + this.getEmpid() + ", email=" + this.getEmail() + ", password=" + this.getPassword() + ", address=" + this.getAddress() + ", teamid=" + this.getTeamid() + ", role=" + this.getRole() + ")";
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 }
