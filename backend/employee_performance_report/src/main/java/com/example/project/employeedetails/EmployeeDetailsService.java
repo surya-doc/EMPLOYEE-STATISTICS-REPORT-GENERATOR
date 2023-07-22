@@ -6,9 +6,9 @@ import com.example.project.exception.ResoruceNotFoundException;
 import com.example.project.mailsender.EmailService;
 import com.example.project.team.Team;
 import com.example.project.team.TeamRepository;
-import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,10 +17,13 @@ import java.util.Optional;
 
 @Service
 public class EmployeeDetailsService {
+
     @Autowired
     private EmployeeDetailsRepository employeeDetailsRepository;
+
     @Autowired
     private TeamRepository teamRepository;
+
     @Autowired
     private EmployeeRepository employeeRepository;
 
@@ -28,22 +31,8 @@ public class EmployeeDetailsService {
     private EmailService emailService;
 
     @Autowired
-    private final StringEncryptor stringEncryptor;
+    private PasswordEncoder passwordEncoder;
 
-//*******************************************************
-
-    public EmployeeDetailsService(EmployeeDetailsRepository employeeDetailsRepository,
-                                  TeamRepository teamRepository,
-                                  EmployeeRepository employeeRepository,
-                                  StringEncryptor stringEncryptor,
-                                  EmailService emailService
-    ) {
-        this.employeeDetailsRepository = employeeDetailsRepository;
-        this.teamRepository = teamRepository;
-        this.employeeRepository = employeeRepository;
-        this.stringEncryptor = stringEncryptor; // Initialize the StringEncryptor
-        this.emailService = emailService;
-    }
     public ResponseEntity<EmployeeDetails> getEmployeeDetailsById(int id) throws ResoruceNotFoundException
     {
         EmployeeDetails employee= this.employeeDetailsRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
@@ -54,13 +43,6 @@ public class EmployeeDetailsService {
     {
         int id = employeeDetails.getEmpid();
         Employee employee = this.employeeRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
-
-        String password = employeeDetails.getPassword();
-
-        // Encrypt the password before saving to the database
-        String encryptedPassword = stringEncryptor.encrypt(employeeDetails.getPassword());
-        employeeDetails.setPassword(encryptedPassword);
-
         Optional<EmployeeDetails> emp=this.employeeDetailsRepository.findById(id);
         System.out.println(emp);
         if(!emp.isEmpty())
@@ -69,7 +51,7 @@ public class EmployeeDetailsService {
         }
         int teamid=employeeDetails.getTeamid();
         Team team = this.teamRepository.findById(teamid).orElseThrow(()->new ResoruceNotFoundException("Team doesnt exist with id :" +teamid));
-
+        String password = passwordEncoder.encode(employeeDetails.getPassword());
         String to = employeeDetails.getEmail();
         String subject = "Welcome to Argusoft, " + employee.getName() + "!!";
         String body = "Dear " + employee.getName() +
@@ -94,6 +76,7 @@ public class EmployeeDetailsService {
                 "Team Argusoft.";
 
         emailService.sendEmail(to, subject, body);
+        employeeDetails.setPassword(passwordEncoder.encode(employeeDetails.getPassword()));
         this.employeeDetailsRepository.save(employeeDetails);
         return ResponseEntity.ok("Created Employee");
     }
