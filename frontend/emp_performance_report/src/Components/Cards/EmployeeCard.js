@@ -1,8 +1,15 @@
+import axios from 'axios';
 import React from 'react'
+import { BiSolidEditAlt } from 'react-icons/bi'
+import { ImBin } from 'react-icons/im'
+import { useNavigate } from 'react-router';
+import { backend_url } from '../../BackendRoute';
 
 function EmployeeCard({employee}) {
+
+
   return (
-    <div className='employeesCard flex items-center border-[1px] w-[60vw] my-4 shadow-lg cursor-pointer transition delay-150 duration-300 ease-in-out hover:scale-105 rounded-md py-4 pl-4 pr-2'>
+    <div className='employeesCard flex items-center w-[60vw] my-4 cursor-pointer rounded-md py-4 pl-4 pr-2'>
         <div className="nameLogo bg-[#E6E6E6] text-[2rem] font-bold w-16 h-16 py-4 flex items-center justify-center px-8">{employee.name.substring(0, 2)}
         <span class="relative flex h-3 w-3">
         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-300 opacity-75"></span>

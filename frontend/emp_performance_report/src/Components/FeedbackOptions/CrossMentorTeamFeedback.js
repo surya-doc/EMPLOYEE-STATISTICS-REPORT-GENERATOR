@@ -45,7 +45,7 @@ function CrossMentorTeamFeedback() {
     try {
       const res = await axios.get(backend_url+'/team/');
       console.log(res.data);
-      setTeams(res.data.filter(mentor => mentor.mentorid != mentorId));
+      setTeams(res.data.filter(mentor => mentor.mentorid != mentorId && mentor.teamid != 1));
     } catch (error) {
       console.log(error);
     }

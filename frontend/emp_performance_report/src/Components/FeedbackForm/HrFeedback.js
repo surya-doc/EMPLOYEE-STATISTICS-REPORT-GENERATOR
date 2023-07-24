@@ -43,6 +43,8 @@ function HrFeedback() {
     }
   }
 
+  
+
   return (
     <div className="HrFeedback">
       <Navbar />
@@ -62,7 +64,7 @@ function HrFeedback() {
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis of communication between 1 to 5">
             {/* <p></p> */}
-                  <select className="input border-b-[1px] bg-[transparent] pb-2 w-full bg-[#FFF]" required style={{outline: "none"}} value={communication} onChange={giveCommunicationRating}>
+                  <select className="input border-b-[1px] bg-[transparent] pb-2 w-full bg-[#FFF] mx-0" required style={{outline: "none"}} value={communication} onChange={giveCommunicationRating}>
                   <option value="">communication</option>
                   <option value={1}>1</option>
                   <option value={2}>2</option>

@@ -6,6 +6,9 @@ import './Login.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 
 function Login() {
   const[email, setEmail] = useState();
@@ -23,21 +26,57 @@ function Login() {
     event.preventDefault()
 
     try {
-        const res = await axios.post("http://localhost:8080/login", {email, password, type});
+        const res = await axios.post("http://localhost:8080/login/", {email, password, type});
         console.log(res);
         if(res.status === 200){
             localStorage.setItem("email", res.data.emailid);
             localStorage.setItem("id", res.data.id);
             localStorage.setItem("type", type);
             localStorage.setItem("name", res.data.name);
+            success("Success!");
             navigate("/")
         }
     } catch (error) {
       if(error.response.status === 500){
-        alert("No user find with this email.");
+        notify("No user found !");
       }
+      else{
         console.log(error);
+        notify("Something went wrong !");
+      }
     }
+}
+
+const notify = (msg) => {
+  // toast("Default Notification !");
+
+  // toast.success("Success Notification !", {
+  //   position: toast.POSITION.TOP_CENTER
+  // });
+
+  toast.error(msg, {
+    position: toast.POSITION.TOP_CENTER
+  });
+
+  // toast.warn("Warning Notification !", {
+  //   position: toast.POSITION.BOTTOM_LEFT
+  // });
+
+  // toast.info("Info Notification !", {
+  //   position: toast.POSITION.BOTTOM_CENTER
+  // });
+
+  // toast("Custom Style Notification with css class!", {
+  //   position: toast.POSITION.BOTTOM_RIGHT,
+  //   className: 'foo-bar'
+  // });
+};
+
+const success = () => {
+    toast.success("Success Notification !", {
+    position: toast.POSITION.TOP_CENTER
+  });
+
 }
 
   return (
@@ -68,7 +107,7 @@ function Login() {
                       <select className="input border-b-[1px] pb-2 w-full bg-[#FFF]"  style={{outline: "none"}} value={type} onChange={handleSelectChange}>
                         <option value="">Choose your role</option>
                         <option value="hr">Hr</option>
-                        <option value="employee">Team Member</option>
+                        <option value="member">Team Member</option>
                         <option value="mentor">Mentor</option>
                       </select>
                   </div>
@@ -77,6 +116,10 @@ function Login() {
             </div>
           </div>
         </div>
+
+        <>
+                    <ToastContainer />
+                  </>
     </div>
   )
 }
