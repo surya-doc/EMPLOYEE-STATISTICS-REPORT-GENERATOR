@@ -49,7 +49,7 @@ function Peerfeedback() {
           <form className='min-h-[82vh] shadow-2xl px-10 flex flex-col justify-center gap-4' style={{backgroundColor: "rgba(255, 255, 255, 0.8"}}  onSubmit={(event) => addPeerFeedback(event)}>
             <h1 className='text-center pb-4 text-2xl font-semibold'>Peer's feedback</h1>
             <div className="feedbacker_name border-b-[1px] pb-2 my-4">
-              <p className='pl-1'>{location.state.feedbacker.name}</p>
+              <p className='pl-1'>{localStorage.getItem("name")}</p>
             </div>
             <div className="peername border-b-[1px] pb-2 my-4">
               <p className='pl-1'>{location.state.employee.name}</p>

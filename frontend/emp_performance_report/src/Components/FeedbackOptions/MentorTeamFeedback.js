@@ -42,11 +42,18 @@ function MentorTeamFeedback() {
   const mentorId = localStorage.getItem('id');
 
   async function getTeamDetails(teamid){
-    console.log("********************")
     try {
-      const teamDetails = await axios.get(backend_url+'/employeeDetail/byteam/'+teamid);
-      console.log(teamDetails);
-      setEmployees(teamDetails.data)
+      const res = await axios.get(backend_url+'/employeeDetail/byteam/'+teamid+'/member');
+      console.log(res);
+      if(res.status === 200){
+        for(let i=0; i<res.data.length; i++){
+          console.log(res.data[i]);
+          const employee = await axios.get(backend_url+'/employee/'+res.data[i].empid);
+          console.log(employee);
+          res.data[i].name = employee.data.name;
+        }
+      }
+      setEmployees(res.data)
     } catch (error) {
       console.log(error);
     }
@@ -54,10 +61,19 @@ function MentorTeamFeedback() {
 
   async function getMentorDetails(){
     try {
-      const mentorDetails = await axios.get(backend_url+'/mentors/'+mentorId);
-      console.log(mentorDetails);
-      setMentor(mentorDetails.data);
-      getTeamDetails(mentorDetails.data.teamid);
+
+      const res = await axios.get(backend_url+'/employeeDetail/'+mentorId);
+      console.log("*******************", res);
+      if(res.status === 200){
+        for(let i=0; i<res.data.length; i++){
+          console.log(res.data[i]);
+          const employee = await axios.get(backend_url+'/employee/'+mentorId);
+          console.log(employee);
+          res.data[i].name = employee.data.name;
+        }
+      }
+      setMentor(res.data);
+      getTeamDetails(res.data.teamid);
     } catch (error) {
       console.log(error);
     }
@@ -70,11 +86,11 @@ function MentorTeamFeedback() {
   return (
     <div>
         <Navbar />
-        <div className="teamdetails flex flex-col items-center pt-6 pb-4">
+        {/* <div className="teamdetails flex flex-col items-center pt-6 pb-4">
             <div className="teamid font-semibold">Team id: <span className='text-base text-[#A62868] pl-4'>{mentor?.teamid}</span></div>
             <div className="teammentor font-semibold">Team mentor: <span className='text-base text-[#A62868] uppercase pl-4'>{mentor?.name}</span></div>
-        </div>
-        <div className=" min-w-[80%] max-w-[80%] mx-auto pl-2">
+        </div> */}
+        <div className=" min-w-[80%] max-w-[80%] mx-auto pl-2 pt-8">
             <h2 className="text-left text-lg font-semibold">Team Members</h2>
         </div>
         <div className='divider bg-divider min-h-[1px] min-w-[80%] max-w-[80%] mx-auto mt-4 mb-4'></div>

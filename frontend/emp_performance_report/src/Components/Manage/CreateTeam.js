@@ -16,7 +16,7 @@ function CreateTeam() {
 
   async function getMentors(){
     try {
-      const res = await axios.get(backend_url+'/mentors/');
+      const res = await axios.get(backend_url+'/employee/');
       console.log(res);
       setMentors(res.data);
     } catch (error) {
@@ -68,10 +68,10 @@ function CreateTeam() {
       />
         
       <select className="input border-b-[1px] px-1 mr-16 bg-[transparent] pb-2 bg-[#FFF] text-sm" required style={{outline: "none"}} value={mentorid} onChange={(event) => setMentorid(event.target.value)}>
-        <option value="">communication</option>
+        <option value="">Mentor</option>
         {
           mentors?.map((mentor, index) => {
-            return <option key={index+1} value={mentor.mentorid}>{mentor.name}: {mentor.mentorid}</option>
+            return <option key={index+1} value={mentor.empid}>{mentor.name}: {mentor.empid}</option>
           })
         }
       </select>

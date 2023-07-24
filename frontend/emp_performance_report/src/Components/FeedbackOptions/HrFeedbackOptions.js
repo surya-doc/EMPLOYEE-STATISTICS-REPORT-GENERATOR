@@ -85,9 +85,14 @@ function HrFeedbackOptions() {
         <div className="members max-w-[78%] mx-auto">
             {
                 teams.map((team, index) => {
-                    return <div key={index+1}>
+                    return (
+                      team.teamid === 1 ?
+                      null :
+                    <div key={index+1}>
                         <TeamsCard team={team} />
                     </div>
+                    )
+                    
                 })
             }
         </div>

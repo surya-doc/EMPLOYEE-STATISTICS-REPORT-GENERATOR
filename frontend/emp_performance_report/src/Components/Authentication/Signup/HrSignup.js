@@ -13,6 +13,7 @@ function HrSignup() {
   const[rePassword, setRePassword] = useState();
   const[password1, setPassword1] = useState(false);
   const[password2, setPassword2] = useState(false);
+  const[address, setAddress] = useState();
 
   const navigate = useNavigate();
 
@@ -22,8 +23,9 @@ function HrSignup() {
         console.log(email, hrId, name, password, rePassword);
         if(password === rePassword){
             try {
-                const res = await axios.post("http://localhost:8080/hr/create", {hrid: hrId, name: name, email: email, password: password, status: true});
-                if(res.status === 200){
+                const res1 = await axios.post("http://localhost:8080/employee/create", {empid: hrId, name: name, status: true});
+                const res2 = await axios.post("http://localhost:8080/employeeDetail/create", {empid: hrId, email, password, name: name, status: true, address, teamid: 1, role: "hr"});
+                if(res2.status === 200){
                     localStorage.setItem("email", email);
                     localStorage.setItem("id", hrId);
                     localStorage.setItem("type", "hr");
@@ -54,6 +56,9 @@ function HrSignup() {
                 </div>
                 <div className='my-4'>
                     <input className='border-b-[1px] pb-2 w-full' type="text" style={{outline: "none"}} placeholder='enter name' onChange={(event) => setName(event.target.value)}/>
+                </div>
+                <div className='my-4'>
+                    <input className='border-b-[1px] pb-2 w-full' type="text" style={{outline: "none"}} placeholder='enter address' onChange={(event) => setAddress(event.target.value)}/>
                 </div>
                 <div className='flex border-b-[1px] pb-2 my-4' >
                 <div className='flex items-center gap-2 w-full'>

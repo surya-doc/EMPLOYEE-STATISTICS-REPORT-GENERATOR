@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../Navbar/Navbar'
-import './Manage.css'
+// import './Manage.css'
 import axios from 'axios';
 import { backend_url } from '../../BackendRoute';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
-function AddEmployee() {
+function EmployeeUpdate() {
   const [employees, setEmployees] = useState();
   const [employeeId, setEmployeeId] = useState('');
   const [employeeName, setEmployeeName] = useState('');
@@ -18,6 +18,8 @@ function AddEmployee() {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+  console.log(location);
 
   async function getTeams(){
     try {
@@ -30,38 +32,42 @@ function AddEmployee() {
   }
 
   
-  async function getEmployees(){
+  async function setEmployeeDefaultData(){
     try {
-      const res = await axios.get(backend_url+'/employee/');
+      const res = await axios.get(backend_url+'/employeeDetail/'+location.state.empid);
       console.log(res);
-      setEmployees(res.data);
+      setEmployeeEmail(res.data.email);
+      setEmployeeAddress(res.data.address);
+      setRole(res.data.role)
+      setEmployeeId(res.data.empid);
     } catch (error) {
       console.log(error);
     }
   }
 
-  useEffect(() => {
-    getTeams();
-    getEmployees();
-  }, [])
-
+  
   async function addMember(event){
     event.preventDefault()
     if(employeeId != null || employeeName != null || employeeEmail != null || employeePassword != null || employeeAddress != null || team != null){
       try {
-        const res2 = await axios.post(backend_url + "/employeeDetail/create", {empid: employeeId, email: employeeEmail, password: employeePassword, address: employeeAddress, teamid: team, role: role});
+        const res2 = await axios.put(backend_url + "/employeeDetail/update", {empid: employeeId, email: employeeEmail, password: employeePassword, address: employeeAddress, teamid: team, role: role});
         console.log(res2);
         if(res2.status === 200){
-          alert("Employee created successfully");
-          // navigate('/');
+          alert("Employee updated successfully");
+          navigate('/hr/employees');
         }
       } catch (error) {
         console.log(error);
         alert("Something went wrong.");
       }
     }
-    console.log(employeeId);
+    console.log(employeeId, employeeEmail, employeePassword, employeeAddress, team, role);
   }
+  
+  useEffect(() => {
+    getTeams();
+    setEmployeeDefaultData();
+  }, [])
 
   return (
     <div className="CrossMentorFeedback bg-[#f7e5ee] min-h-[100vh]">
@@ -70,19 +76,10 @@ function AddEmployee() {
       <div className='w-full relative'>
         {/* <img className='absolute left-0 right-0' style={{zIndex: -1}} src="/feedback.png" alt="" /> */}
         <form className='min-h-[82vh] bg-[#FFF] shadow-2xl px-10 flex flex-col justify-center py-16 gap-4 gap-y-14' style={{backgroundColor: "rgba(255, 255, 255, 1"}} onSubmit={(event) => addMember(event)}>
-            <h1 className='text-center pb-4 text-2xl uppercase' style={{letterSpacing: "1px"}}>Add Employee Detail</h1>
-      <select className="input border-b-[1px] px-1 mx-auto bg-[transparent] pb-2 bg-[#FFF] text-sm w-full" required style={{outline: "none"}} value={employeeName} onChange={(event) => {
-        setEmployeeId(event.target.value)
-        setEmployeeName()
-      }
-      }>
-        <option value="">Employee Name</option>
-        {
-          employees?.map((employee) => {
-            return <option value={employee.empid}>{employee.name}</option>
-          })
-        }
-      </select>
+            <h1 className='text-center pb-4 text-2xl uppercase' style={{letterSpacing: "1px"}}>Update employee detail</h1>
+            <div className='input border-b-[1px] px-1 text-sm pb-1'>Emp id: {location.state.empid}</div>
+            <div className='input border-b-[1px] px-1 text-sm pb-1'>Emp name: {location.state.name}</div>
+
       <input
         className='input border-b-[1px] px-1 text-sm pb-1'
         type="text"
@@ -119,7 +116,11 @@ function AddEmployee() {
           })
         }
       </select>
-      <button type='submit' className='text-sm bg-[#A62868] w-60 py-3 mt-8 text-[#FFF] rounded-sm mx-auto'>Submit</button>
+      <div className="buttonholder flex justify-center gap-4">
+        <button className='cancel_btn text-sm bg-[#D191B1] px-4 border-[1px] border-[#A62868] text-[#A62868] py-3 mt-8 rounded-sm' onClick={() => navigate('/hr/employees')}>Cancel</button>
+        <button type='submit' className='submit_btn text-sm bg-[#A62868] px-4 py-3 mt-8 text-[#FFF] rounded-sm'>Submit</button>
+      </div>
+
         </form>
       </div>
     </div>
@@ -127,4 +128,4 @@ function AddEmployee() {
   )
 }
 
-export default AddEmployee
+export default EmployeeUpdate

@@ -21,15 +21,20 @@ import OtherTeams from './Components/FeedbackOptions/OtherTeams';
 import Manage from './Components/Manage/Manage';
 import AddEmployee from './Components/Manage/AddEmployee';
 import CreateTeam from './Components/Manage/CreateTeam';
-import CreateMentor from './Components/Manage/CreateMentor';
+// import CreateMentor from './Components/Manage/CreateMentor';
 import EmployeeDetails from './Components/DetailsForHr/EmployeeDetails';
 import MentorDetails from './Components/DetailsForHr/MentorDetails';
 import TeamDetails from './Components/DetailsForHr/TeamDetails';
 import Details from './Components/DetailsForHr/Details';
+import Members from './Components/Manage/Members';
+import EmployeeUpdate from './Components/Update/EmployeeUpdate';
+import EmployeeStat from './Components/Stat/EmployeeStat';
 
+import { toast, ToastContainer } from 'react-toastify';
 function App() {
   return (
     <div className="App">
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path='/signup/employee' element={<EmpSignup />} />
@@ -54,9 +59,13 @@ function App() {
         <Route path='/hr/teamdetails' element={<TeamDetails />} />
 
         <Route path='/manage' element={<Manage />} />
-        <Route path='/manage/createmember' element={<AddEmployee />} />
+        <Route path='/manage/employeedetail' element={<AddEmployee />} />
         <Route path='/manage/createteam' element={<CreateTeam />} />
-        <Route path='/manage/creatementor' element={<CreateMentor />} />
+        <Route path='/manage/createemployee' element={<Members />} />
+
+        <Route path='/hr/update/employee' element={<EmployeeUpdate />} />
+
+        <Route path='/employee/statistics' element={<EmployeeStat />} />
       </Routes>
     </div>
   );

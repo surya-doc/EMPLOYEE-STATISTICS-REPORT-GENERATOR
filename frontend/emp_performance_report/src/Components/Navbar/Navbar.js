@@ -13,7 +13,7 @@ function Navbar() {
   function checkFeedbacker(){
     const type = localStorage.getItem('type');
     console.log("type");
-    if(type === "employee"){
+    if(type === "member"){
       navigate("/peerfeedback");
     }
     else if(type === "mentor"){

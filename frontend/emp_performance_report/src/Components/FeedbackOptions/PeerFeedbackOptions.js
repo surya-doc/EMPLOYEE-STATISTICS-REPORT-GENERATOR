@@ -39,6 +39,8 @@ function PeerFeedbackOptions() {
   const[employees, setEmployees] = useState([]);
   const[employee, setEmployee] = useState();
   const[team, setTeam] = useState();
+  const[teamDetails, setTeamDetails] = useState();
+
   const empId = localStorage.getItem('id');
 
   async function getTeamDetails(){
@@ -48,19 +50,45 @@ function PeerFeedbackOptions() {
       console.log(empDetails, empDetails.data.teamid);
       setEmployee(empDetails.data);
     } catch (error) {
-      alert("Something went wrong!!");
+      
+      console.log(error);
     }
     try {
-      const teamDetails = await axios.get(backend_url+'/mentors/byteam/'+empDetails.data.teamid);
-      console.log(teamDetails);
-      setTeam(teamDetails);
+      const res = await axios.get(backend_url+'/employeeDetail/byteam/'+empDetails.data.teamid+'/member');
+      console.log(res);
+      if(res.status === 200){
+        for(let i=0; i<res.data.length; i++){
+          console.log(res.data[i]);
+          const employee = await axios.get(backend_url+'/employee/'+res.data[i].empid);
+          console.log(employee);
+          res.data[i].name = employee.data.name;
+        }
+      }
+      setEmployees(res.data);
     } catch (error) {
-      alert("Something went wrong!!");
+      
+      console.log(error);
     }
     try {
-      const teamDetails = await axios.get(backend_url+'/employeeDetail/byteam/'+empDetails.data.teamid);
+      const res = await axios.get(backend_url+'/employeeDetail/byteam/'+empDetails.data.teamid+'/mentor');
+      console.log(res);
+      if(res.status === 200){
+        for(let i=0; i<res.data.length; i++){
+          console.log(res.data[i]);
+          const employee = await axios.get(backend_url+'/employee/'+res.data[i].empid);
+          console.log(employee);
+          res.data[i].name = employee.data.name;
+        }
+      }
+      setTeam(res.data[0]);
+    } catch (error) {
+      
+      console.log(error);
+    }
+    try {
+      const teamDetails = await axios.get(backend_url+'/team/'+empDetails.data.teamid);
       console.log(teamDetails);
-      setEmployees(teamDetails.data)
+      setTeamDetails(teamDetails.data)
     } catch (error) {
       console.log(error);
     }
@@ -74,9 +102,11 @@ function PeerFeedbackOptions() {
     <div>
         <Navbar />
         <div className="teamdetails flex flex-col items-center pt-6 pb-4">
-            <div className="teamid font-semibold">Team id: <span className='text-base text-[#A62868] pl-4'>1</span></div>
-            <div className="teammentor font-semibold">Team mentor: <span className='text-base text-[#A62868] uppercase pl-4'>{team?.data.name}</span></div>
+            <div className="teamid font-semibold">Team id: <span className='text-base text-[#A62868] pl-4'>{team?.teamid}</span></div>
+            <div className="teammentor font-semibold">Team mentor: <span className='text-base text-[#A62868] uppercase pl-4'>{team?.name}</span></div>
+            <div className="teammentor font-semibold text-[#A62868] text-2xl border-[1px] px-8 py-2 rounded-md my-8">{teamDetails?.team_description}</div>
         </div>
+        <div className='divider bg-divider min-h-[1px] min-w-[80%] max-w-[86%] mx-auto mt-4 mb-4'></div>
         <div className="members flex flex-col items-center">
             {
                 employees?.map((emp) => {
@@ -84,7 +114,7 @@ function PeerFeedbackOptions() {
                         <PeerFeedbackEmployeesCard employee={emp} feedbacker={employee}/>
                     </div> : 
                     // console.log(emp, employee)
-                    console.log("You.")
+                    console.log("You.", team)
                 })
             }
         </div>

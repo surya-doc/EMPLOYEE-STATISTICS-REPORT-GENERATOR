@@ -40,7 +40,7 @@ function MentorFeedback() {
   async function addMentorFeedback(event){
     event.preventDefault()
     try {
-      const res = await axios.post(backend_url+'/mentorFeedback/create', {empid: location.state.employee.empid, mentorid: location.state.mentor.mentorid, teamid: location.state.employee.teamid, mentorteamid: location.state.mentor.teamid, communication, behaviour, responsibility, deadline, workload, extrawork});
+      const res = await axios.post(backend_url+'/mentorFeedback/create', {empid: location.state.employee.empid, mentorid: localStorage.getItem('id'), empteamid: location.state.employee.teamid, mentorteamid: location.state.mentor.teamid, communication, behaviour, responsibility, deadline, workload, extrawork});
       console.log(res);
       if(res.status === 200){
         alert("Your response got submitted successfully.");
@@ -60,7 +60,7 @@ function MentorFeedback() {
           <form className='min-h-[82vh] shadow-2xl px-10 flex flex-col justify-center py-16 gap-4' style={{backgroundColor: "rgba(255, 255, 255, 0.7"}} action=""  onSubmit={(event) => addMentorFeedback(event)}>
             <h1 className='text-center pb-4 text-2xl font-semibold'>Mentor's feedback</h1>
             <div className="feedbacker_name border-b-[1px] pb-2 my-4">
-              <p className='pl-1'>{location.state.mentor.name}</p>
+              <p className='pl-1'>{localStorage.getItem('name')}</p>
             </div>
             <div className="peername border-b-[1px] pb-2 my-4">
               <p className='pl-1'>{location.state.employee.name}</p>

@@ -45,9 +45,15 @@ var employees = [
 
     async function getTeamMembers(){
       try {
-        const res = await axios.get(backend_url+'/employeeDetail/byteam/'+location.state.teamid);
+        const res = await axios.get(backend_url+'/employeeDetail/byteam/'+location.state.teamid+'/member');
         console.log(res);
         if(res.status === 200){
+          for(let i=0; i<res.data.length; i++){
+            console.log(res.data[i]);
+            const employee = await axios.get(backend_url+'/employee/'+res.data[i].empid);
+            console.log(employee);
+            res.data[i].name = employee.data.name;
+          }
           setEmployees(res.data);
         }
       } catch (error) {

@@ -39,6 +39,7 @@ var employees = [
 
 function Landing() {
   const[isHr, setIsHr] = useState(false);
+  const[isMember, setIsMember] = useState(false);
 
   const empId = localStorage.getItem('id');
 
@@ -46,11 +47,17 @@ function Landing() {
 
   async function check(){
     try {
-      const res = await axios.get(backend_url+'/hr/'+empId);
-      console.log(res);
-      if(res.status === 200){
+      const res = await axios.get(backend_url+'/employeeDetail/'+empId);
+      console.log(res.data.role);
+      if(res.status === 200 && res.data.role === "hr"){
         console.log("*")
         setIsHr(true);
+      }
+      else if(res.status === 200 && res.data.role === "member"){
+        setIsMember(true);
+      }
+      else{
+        setIsHr(false);
       }
     } catch (error) {
       console.log(error);
@@ -78,6 +85,9 @@ function Landing() {
                   <div className={`manage ${isHr === true ? 'block' : 'hidden'}`}>
                     <button className='text-base bg-[#A62868] border-[1px] border-[#A62868] py-1 px-4 text-[#FFF] rounded-2xl' onClick={() => {navigate('/manage')}}>Manage</button>
                   </div>
+                  <div className={`manage ${isMember === true ? 'block' : 'hidden'}`}>
+                    <button className='text-base bg-[#e4bed1] border-[1px] border-[#A62868] text-[#A62868] py-1 px-4 rounded-2xl' onClick={() => {navigate('/employee/statistics')}}>Statistics</button>
+                  </div>
                 </div>
             </div>
             <div className="right w-4/12">
@@ -99,9 +109,9 @@ function Landing() {
           <div className="bg-[#E6E6E6] min-h-[2px] min-w-[40%] max-w-[40%] mx-auto mb-4"></div>
           <div className="employees flex flex-col items-center" id='employee'>
             {
-              employees.map((emp) => {
-                return <div>
-                  <EmployeeCard employee={emp} />
+              employees.map((emp, index) => {
+                return <div className='border-[1px] shadow-lg my-4'>
+                  <EmployeeCard key={index+1} employee={emp} />
                 </div>
               })
             }
