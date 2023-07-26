@@ -1,0 +1,14 @@
+.background{
+    background-image: url("../../../public/signup.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.input{
+    /* margin: 0px 20px; */
+}
+
+.input:focus{
+    border-bottom: 1px solid #A62868;
+}
