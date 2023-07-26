@@ -62,7 +62,7 @@ public class EmployeeDetailsService {
                 "\n" +
                 "Employee ID: " + employeeDetails.getEmpid() + "\n" +
                 "Email: " + employeeDetails.getEmail() + "\n" +
-                "Password: " + password + "\n" +
+                "Password: " + employeeDetails.getPassword() + "\n" +
                 "Team ID: " + employeeDetails.getTeamid() + "\n" +
                 "Role: " + employeeDetails.getRole() + "\n" +
                 "Address: " + employeeDetails.getAddress() + "\n" +
@@ -86,6 +86,31 @@ public class EmployeeDetailsService {
         int id=employeeDetails.getEmpid();
         Employee employee = this.employeeRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
         EmployeeDetails emp= this.employeeDetailsRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
+
+        String subject = "Update: Your Details at Argusoft";
+        String body = "Dear " + employee.getName() + ",\n" +
+                "\n" +
+                "We hope this email finds you well. We are writing to inform you that some of your details have been updated in our records. Please review the following information:\n" +
+                "\n" +
+                "Employee ID: " + employeeDetails.getEmpid() + "\n" +
+                "Email: " + employeeDetails.getEmail() + "\n" +
+                "Password: " + employeeDetails.getPassword() + " (Please make sure to keep this confidential.)\n" +
+                "Team ID: " + employeeDetails.getTeamid() + "\n" +
+                "Role: " + employeeDetails.getRole() + "\n" +
+                "Address: " + employeeDetails.getAddress() + "\n" +
+                "\n" +
+                "If you have not requested any changes or if you believe there is an error, please contact your supervisor or the HR department immediately.\n" +
+                "\n" +
+                "As always, if you have any questions or need assistance, feel free to reach out to us.\n" +
+                "\n" +
+                "Thank you for being part of the Argusoft team.\n" +
+                "\n" +
+                "Best regards,\n" +
+                "Team Argusoft.";
+        String to = employeeDetails.getEmail();
+        emailService.sendEmail(to, subject, body);
+
+        employeeDetails.setPassword(passwordEncoder.encode(employeeDetails.getPassword()));
         this.employeeDetailsRepository.save(employeeDetails);
         return ResponseEntity.ok("Updated Employee");
     }
@@ -114,6 +139,16 @@ public class EmployeeDetailsService {
             employeeList.add(employeeRepository.findById(empid).orElseThrow());
         }
         return ResponseEntity.ok(employeeList);
+    }
+
+    public ResponseEntity<EmployeeDetails> getByEmail(String email) throws ResoruceNotFoundException
+    {
+        EmployeeDetails emp= this.employeeDetailsRepository.findByEmail(email);
+        if(emp==null)
+        {
+            throw new ResoruceNotFoundException("Employee Doesnt Exists");
+        }
+        return ResponseEntity.ok(emp);
     }
 
 }

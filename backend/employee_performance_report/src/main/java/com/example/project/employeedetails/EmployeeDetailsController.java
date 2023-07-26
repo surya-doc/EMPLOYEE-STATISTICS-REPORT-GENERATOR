@@ -49,4 +49,10 @@ public class EmployeeDetailsController {
 		return this.employeeDetailsService.getEmployeeByRole(role);
 	}
 
+	@PostMapping("/byemail")
+	public  ResponseEntity<EmployeeDetails> getEmployeeDetailByEmail(@RequestBody EmployeeDetails employeeDetails) throws ResoruceNotFoundException {
+		String email = employeeDetails.getEmail();
+		return this.employeeDetailsService.getByEmail(email);
+	}
+
 }

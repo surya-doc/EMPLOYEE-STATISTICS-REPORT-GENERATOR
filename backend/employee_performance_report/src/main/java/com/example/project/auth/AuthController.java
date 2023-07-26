@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin("*")
 public class  AuthController {
 
     @Autowired
@@ -63,7 +64,7 @@ public class  AuthController {
     public String exceptionHandler() {
         return "Credentials Invalid !!";
     }
-    @PostMapping("/create-user")
+    @PostMapping("/create")
     public ResponseEntity<String> createUser(@RequestBody EmployeeDetails user) throws ResoruceNotFoundException {
         return userService.createEmployeeDetails(user);
     }

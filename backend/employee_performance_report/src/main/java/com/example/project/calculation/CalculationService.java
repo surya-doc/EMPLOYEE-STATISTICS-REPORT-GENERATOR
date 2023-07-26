@@ -1,6 +1,7 @@
 package com.example.project.calculation;
 
 import com.example.project.employeedetails.EmployeeDetails;
+import com.example.project.employeedetails.EmployeeDetailsRepository;
 import com.example.project.exception.ResoruceNotFoundException;
 import com.example.project.hrfeedback.HrFeedback;
 import com.example.project.hrfeedback.HrFeedbackRepository;
@@ -12,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CalculationService {
@@ -24,6 +28,12 @@ public class CalculationService {
 
     @Autowired
     private PeerFeedbackRepository peerFeedbackRepository;
+
+    @Autowired
+    private EmployeeDetailsRepository employeeDetailsRepository;
+
+    @Autowired
+    private CalculationRepository calculationRepository;
 
     // Maximum possible value for each field
     private static final int MAX_FIELD_VALUE = 5;
@@ -159,6 +169,32 @@ public class CalculationService {
 
         a.setPercentile(percentile);
 
+        calculationRepository.save(a);
+
         return ResponseEntity.ok(a);
+    }
+
+    public List<Calculation> getStatByTeam(int teamid) throws ResoruceNotFoundException
+    {
+        List<Calculation> calculationList = new ArrayList<>();
+        List<EmployeeDetails> employeeDetailsList=employeeDetailsRepository.getemployeeBYTeam(teamid,"member");
+        for(EmployeeDetails employeeDetails: employeeDetailsList)
+        {
+            int empid= employeeDetails.getEmpid();
+            Optional<Calculation> calculation=this.calculationRepository.findById(empid);
+            if(calculation.isEmpty())
+            {
+                continue;
+            }
+            Calculation calculation1 = this.calculationRepository.findById(empid).orElseThrow();
+            calculationList.add(calculation1);
+        }
+        return calculationList;
+    }
+
+    public List<Calculation> getOrderedStats() throws ResoruceNotFoundException
+    {
+        List<Calculation> calculationList = this.calculationRepository.getOrderedStats();
+        return calculationList;
     }
 }

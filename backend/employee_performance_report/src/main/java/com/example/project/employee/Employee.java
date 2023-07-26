@@ -12,9 +12,9 @@ public class Employee {
     private String name;
     private Boolean status;
     private Integer attendance;
-    private String total_working_days;
+    private Integer total_working_days;
 
-    public Employee(Integer empid, String name, Boolean status, Integer attendance, String total_working_days) {
+    public Employee(Integer empid, String name, Boolean status, Integer attendance, Integer total_working_days) {
         this.empid = empid;
         this.name = name;
         this.status = status;
@@ -42,7 +42,7 @@ public class Employee {
         return this.attendance;
     }
 
-    public String getTotal_working_days() {
+    public Integer getTotal_working_days() {
         return this.total_working_days;
     }
 
@@ -62,7 +62,7 @@ public class Employee {
         this.attendance = attendance;
     }
 
-    public void setTotal_working_days(String total_working_days) {
+    public void setTotal_working_days(Integer total_working_days) {
         this.total_working_days = total_working_days;
     }
 

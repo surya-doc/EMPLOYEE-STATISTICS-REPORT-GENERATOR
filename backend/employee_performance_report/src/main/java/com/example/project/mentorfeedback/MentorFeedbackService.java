@@ -29,6 +29,12 @@ public class MentorFeedbackService {
 
     public ResponseEntity<String> addMentorFeedbackForEmployee(MentorFeedback mentorFeedback) throws ResoruceNotFoundException {
         int id = mentorFeedback.getEmpid();
+        int mentorId = mentorFeedback.getMentorid();
+        List<MentorFeedback> mentorFeedbackList = mentorFeedbackRepository.getFeedbackByDetails(id,mentorId);
+        if(mentorFeedbackList.size()!=0)
+        {
+            throw new ResoruceNotFoundException("Feedback already exists");
+        }
         Optional<MentorFeedback> emp=this.mentorFeedbackRepository.findById(id);
         System.out.println(emp);
         if(!emp.isEmpty())
