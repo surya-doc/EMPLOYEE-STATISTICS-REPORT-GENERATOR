@@ -10,5 +10,6 @@ import java.util.List;
 
 @Repository
 public interface CalculationRepository extends JpaRepository<Calculation, Integer> {
-
+    @Query("Select calc from calculation calc order by calc.percentile DESC")
+    public List<Calculation> getOrderedStats();
 }

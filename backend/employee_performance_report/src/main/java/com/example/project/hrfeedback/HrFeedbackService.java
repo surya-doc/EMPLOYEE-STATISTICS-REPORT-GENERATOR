@@ -3,6 +3,7 @@ package com.example.project.hrfeedback;
 import com.example.project.employee.Employee;
 import com.example.project.employee.EmployeeRepository;
 import com.example.project.exception.ResoruceNotFoundException;
+import com.example.project.mentorfeedback.MentorFeedback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,13 +25,19 @@ public class HrFeedbackService {
     }
     public ResponseEntity<String> createHrFeedback(HrFeedback hr) throws ResoruceNotFoundException {
         int id = hr.getHrid();
+        int empid = hr.getEmpid();
+        List<HrFeedback> HrFeedbackList = hrFeedbackRepository.getFeedbackByDetails(empid,id);
+        System.out.println(HrFeedbackList);
+        if(HrFeedbackList.size()!=0)
+        {
+            throw new ResoruceNotFoundException("Feedback already exists");
+        }
         Optional<HrFeedback> emp=this.hrFeedbackRepository.findById(id);
         System.out.println(emp);
         if(!emp.isEmpty())
         {
             throw new ResoruceNotFoundException("HrFeedback Already Exists");
         }
-        int empid=hr.getEmpid();
         Employee employeeDetails = employeeRepository.findById(empid).orElseThrow(()->new ResoruceNotFoundException("Employee doesnt exist with id :" +id));
         Employee hr1 = employeeRepository.findById(id).orElseThrow(()->new ResoruceNotFoundException("Hr doesnt exist with id :" +id));
         this.hrFeedbackRepository.save(hr);
