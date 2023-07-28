@@ -1,36 +1,27 @@
-import React, { useState } from 'react'
-import Navbar from '../../Navbar/Navbar'
-import { AiOutlineEye } from 'react-icons/ai';
-import { AiOutlineEyeInvisible } from 'react-icons/ai';
+import React, { useEffect, useState } from 'react'
+import Navbar from '../Navbar/Navbar'
+import { useLocation, useNavigate } from 'react-router';
 import axios from 'axios';
-import { useNavigate } from 'react-router';
+import { backend_url } from '../../BackendRoute';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import AdminHeader from '../../Admin/AdminHeader';
 
-function HrSignup() {
-  const[email, setEmail] = useState();
-  const[hrId, setHrId] = useState();
-  const[name, setName] = useState();
-  const[password, setPassword] = useState();
-  const[rePassword, setRePassword] = useState();
-  const[password1, setPassword1] = useState(false);
-  const[password2, setPassword2] = useState(false);
-  const[address, setAddress] = useState();
-  const [error, setError] = useState('');
+function PasswordUpdate() {
+    const[email, setEmail] = useState();
+    const[password, setPassword] = useState();
+    const[rePassword, setRePassword] = useState();
+    const[password1, setPassword1] = useState(false);
+    const[password2, setPassword2] = useState(false);
+    const [error, setError] = useState('');
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const validateForm = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     
         let isValid = true;
-    
-        if (!name.trim()) {
-        isValid = false;
-        setError('Invalid name');
-        }
     
         if (!emailRegex.test(email)) {
         isValid = false;
@@ -45,28 +36,37 @@ function HrSignup() {
         return isValid;
     };
 
+    const location = useLocation();
+
+    useEffect(() => {
+        if(location.state === false || location.state === null){
+            navigate('/');
+        }
+    }, [])
+
     async function getValues(event){
         event.preventDefault()
+
+        console.log(email, password, rePassword);
         if (validateForm()) {
             if(password === rePassword){
                 try {
-                    const res1 = await axios.post("http://localhost:8080/employee/create", {empid: hrId, name: name, status: true});
-                    const res2 = await axios.post("http://localhost:8080/auth/create", {empid: hrId, email, password, name: name, status: true, address, teamid: 1, role: "hr"});
-                    if(res2.status === 200){
+                    const res = await axios.put(backend_url+'/employeeDetail/update/password', {email, password});
+                    console.log(res);
+                    if(res.status === 200){
                         // localStorage.setItem("email", email);
                         // localStorage.setItem("id", hrId);
                         // localStorage.setItem("type", "hr");
                         // localStorage.setItem("name", name);
-                        success("Successfully added new Hr");
-                        navigate('/admin')
+                        success(res.data);
+                        navigate("/login");
                     }
                 } catch (error) {
-                    // notify("Something went wrong")
                     console.log(error);
                 }
             }
             else{
-                notify("Password doesn't matchs. Check once.")
+                notify(error);
             }
         } else {
             notify(error);
@@ -83,25 +83,18 @@ function HrSignup() {
           toast.success(msg, {
           position: toast.POSITION.TOP_CENTER
         });
+      
       }
   return (
     <div className="hrsignup">
-        <AdminHeader />
+      <Navbar />
         <div className='flex justify-center items-center min-h-[94vh] flex-col'>
-            <h1 className='pb-4 text-xl'>Add new Hr</h1>
+            <h1 className='pb-4 text-xl'>Signup as HR</h1>
             <form className='flex flex-col rounded-md px-16 gap-4 bg-[#FFF] shadow-lg py-8' onSubmit={(event) => getValues(event)}>
                 <div className='my-4'>
                     <input className='border-b-[1px] pb-2 w-full' type="email" style={{outline: "none"}} placeholder='enter email' onChange={(event) => setEmail(event.target.value)}/>
                 </div>
-                <div className='my-4'>
-                    <input className='border-b-[1px] pb-2 w-full' type="number" style={{outline: "none"}} placeholder='enter hr id' onChange={(event) => setHrId(event.target.value)}/>
-                </div>
-                <div className='my-4'>
-                    <input className='border-b-[1px] pb-2 w-full' type="text" style={{outline: "none"}} placeholder='enter name' onChange={(event) => setName(event.target.value)}/>
-                </div>
-                <div className='my-4'>
-                    <input className='border-b-[1px] pb-2 w-full' type="text" style={{outline: "none"}} placeholder='enter address' onChange={(event) => setAddress(event.target.value)}/>
-                </div>
+                
                 <div className='flex border-b-[1px] pb-2 my-4' >
                 <div className='flex items-center gap-2 w-full'>
                     <input className='w-full' style={{outline: "none"}} required type={`${password1 ? 'text' : 'password'}`} placeholder="Enter password" onChange={(event) => setPassword(event.target.value)}/>
@@ -129,4 +122,4 @@ function HrSignup() {
   )
 }
 
-export default HrSignup
+export default PasswordUpdate

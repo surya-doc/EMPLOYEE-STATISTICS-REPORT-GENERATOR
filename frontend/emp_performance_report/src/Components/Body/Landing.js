@@ -6,51 +6,26 @@ import EmployeeCard from '../Cards/EmployeeCard';
 import axios from 'axios';
 import { backend_url } from '../../BackendRoute';
 import { useNavigate } from 'react-router';
+import { getapiCall } from '../APICall/apiget';
 
-var employees = [
-  {
-    empid: 1,
-    name: "John Doe",
-    email: "john.doe@example.com",
-    password: "password123",
-    status: true,
-    attendance: 90,
-    teamid: 1
-  },
-  {
-    empid: 2,
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    password: "password456",
-    status: true,
-    attendance: 95,
-    teamid: 1
-  },
-  {
-    empid: 3,
-    name: "Mike Johnson",
-    email: "mike.johnson@example.com",
-    password: "password789",
-    status: true,
-    attendance: 85,
-    teamid: 2
-  }
-];
 
 function Landing() {
   const[isHr, setIsHr] = useState(false);
   const[isMember, setIsMember] = useState(false);
+  const[employees, setEmployees] = useState([]);
 
   const empId = localStorage.getItem('id');
 
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+
   async function check(){
     try {
-      const res = await axios.get(backend_url+'/employeeDetail/'+empId);
-      console.log(res.data.role);
+      const url = `${backend_url}/employeeDetail/${empId}`;
+      const res = await getapiCall(url, token);
+
       if(res.status === 200 && res.data.role === "hr"){
-        console.log("*")
         setIsHr(true);
       }
       else if(res.status === 200 && res.data.role === "member"){
@@ -61,14 +36,26 @@ function Landing() {
       }
     } catch (error) {
       console.log(error);
-      if(error.response.status === 404){
-        setIsHr(false);
-      }
+      localStorage.removeItem("email");
+      localStorage.removeItem("id");
+      localStorage.removeItem("type");
+      localStorage.removeItem("name");
+      localStorage.removeItem("token");
+    }
+  }
+
+  async function getTopEmployees(){
+    try {
+      const res = await axios.get(backend_url+'/calculate/sorted');
+      setEmployees(res.data);
+    } catch (error) {
+      console.log(error);
     }
   }
 
   useEffect(() => {
     check();
+    getTopEmployees();
   }, [])
 
   return (
@@ -109,7 +96,7 @@ function Landing() {
           <div className="bg-[#E6E6E6] min-h-[2px] min-w-[40%] max-w-[40%] mx-auto mb-4"></div>
           <div className="employees flex flex-col items-center" id='employee'>
             {
-              employees.map((emp, index) => {
+              employees.slice(0, 3).map((emp, index) => {
                 return <div className='border-[1px] shadow-lg my-4'>
                   <EmployeeCard key={index+1} employee={emp} />
                 </div>

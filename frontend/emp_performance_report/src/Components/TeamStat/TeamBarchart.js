@@ -4,8 +4,7 @@ import { Bar } from "react-chartjs-2";
 
 ChartJs.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
-function BarChart({teams, teamData, teamLabels}) {
-    console.log(teams);
+function TeamBarchart({teamData, teamLabels}) {
     const state = {
       labels: teamLabels,
       datasets: [
@@ -19,7 +18,8 @@ function BarChart({teams, teamData, teamLabels}) {
       ]
     }
   return (
-    <div>
+    <div className='px-16'>
+      <h1>Overall Percentile</h1>
       <Bar
         data={state}
         options={{
@@ -38,4 +38,4 @@ function BarChart({teams, teamData, teamLabels}) {
   )
 }
 
-export default BarChart
+export default TeamBarchart

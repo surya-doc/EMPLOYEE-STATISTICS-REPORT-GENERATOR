@@ -21,7 +21,6 @@ import OtherTeams from './Components/FeedbackOptions/OtherTeams';
 import Manage from './Components/Manage/Manage';
 import AddEmployee from './Components/Manage/AddEmployee';
 import CreateTeam from './Components/Manage/CreateTeam';
-// import CreateMentor from './Components/Manage/CreateMentor';
 import EmployeeDetails from './Components/DetailsForHr/EmployeeDetails';
 import MentorDetails from './Components/DetailsForHr/MentorDetails';
 import TeamDetails from './Components/DetailsForHr/TeamDetails';
@@ -29,43 +28,109 @@ import Details from './Components/DetailsForHr/Details';
 import Members from './Components/Manage/Members';
 import EmployeeUpdate from './Components/Update/EmployeeUpdate';
 import EmployeeStat from './Components/Stat/EmployeeStat';
+import TeamStat from './Components/TeamStat/TeamStat';
 
 import { toast, ToastContainer } from 'react-toastify';
+import PersonalUpdate from './Components/Update/PersonalUpdate';
+import PasswordUpdate from './Components/Update/PasswordUpdate';
+import GuardedRoute from './Components/GuardedRoute/GuardedRoute';
+import AdminLogin from './Components/Admin/AdminLogin';
+import Admin from './Components/Admin/Admin';
 function App() {
   return (
     <div className="App">
       <ToastContainer />
       <Routes>
-        <Route path="/" element={<Landing />} />
+
+        {/* common routes */}
+        <Route path='/' element={<Landing />} />
+
         <Route path='/signup/employee' element={<EmpSignup />} />
-        <Route path='/signup/hr' element={<HrSignup />} />
-        <Route path='/signup/mentor' element={<MentorSignup />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/peerfeedback' element={<PeerFeedbackOptions />} />
-        <Route path='/mentorfeedback' element={<MentorFeedbackOptions />} />
-        <Route path='/mentorfeedback/team' element={<MentorTeamFeedback />} />
-        <Route path='/mentorfeedback/crossteam' element={<CrossMentorTeamFeedback />} />
-        <Route path='/mentorfeedback/crossteam/:crossteamid' element={<OtherTeams />} />
-        <Route path='/hrfeedback' element={<HrFeedbackOptions />} />
-        <Route path='/feedback/peer' element={<Peerfeedback />} />
-        <Route path='/feedback/mentor' element={<MentorFeedback />} />
-        <Route path='/feedback/crossmentor' element={<CrossMentorFeedback />} />
-        <Route path='/feedback/hrfeedback' element={<HrFeedback />} />
-        <Route path='/hrfedback/team' element={<TeamsFeedback />} />
+        <Route path='/update' element={<PersonalUpdate />} />
+        <Route path='/update/password' element={<PasswordUpdate />} />
+        <Route path='/admin/login' element={<AdminLogin />} />
 
-        <Route path='/hr/details' element={<Details />} />
-        <Route path='/hr/employees' element={<EmployeeDetails />} />
-        <Route path='/hr/mentordetails' element={<MentorDetails />} />
-        <Route path='/hr/teamdetails' element={<TeamDetails />} />
+        {/* admin routes */}
+          <Route path='/admin/addhr' element={<GuardedRoute type={"admin"} />} >
+            <Route path='/admin/addhr' element={<HrSignup />} />
+          </Route>
+          <Route path='/admin' element={<GuardedRoute type={"admin"} />} >
+            <Route path='/admin' element={<Admin />} />
+          </Route>
 
-        <Route path='/manage' element={<Manage />} />
-        <Route path='/manage/employeedetail' element={<AddEmployee />} />
-        <Route path='/manage/createteam' element={<CreateTeam />} />
-        <Route path='/manage/createemployee' element={<Members />} />
+        {/* hr routes */}
 
-        <Route path='/hr/update/employee' element={<EmployeeUpdate />} />
+          {/* private route */}
+          <Route path='/manage' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/manage' element={<Manage />} />
+          </Route>
+          <Route path='/manage/createteam' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/manage/createteam' element={<CreateTeam />} />
+          </Route>
+          <Route path='/manage/createemployee' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/manage/createemployee' element={<Members />} />
+          </Route>
+          <Route path='/manage/employeedetail' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/manage/employeedetail' element={<AddEmployee />} />
+          </Route>
+          <Route path='/hrfeedback' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/hrfeedback' element={<HrFeedbackOptions />} />
+          </Route>
+          <Route path='/feedback/hrfeedback' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/feedback/hrfeedback' element={<HrFeedback />} />
+          </Route>
+          <Route path='/hrfedback/team' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/hrfedback/team' element={<TeamsFeedback />} />
+          </Route>
+          <Route path='/hr/details' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/hr/details' element={<Details />} />
+          </Route>
+          <Route path='hr/mentordetails' element={<GuardedRoute type={"hr"} />}>
+            <Route path='/hr/mentordetails' element={<MentorDetails />} />
+          </Route>
+          <Route path='/hr/employees' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/hr/employees' element={<EmployeeDetails />} />
+          </Route>
+          <Route path='/hr/teamdetails' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/hr/teamdetails' element={<TeamDetails />} />
+          </Route>
+          <Route path='/hr/update/employee' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/hr/update/employee' element={<EmployeeUpdate />} />
+          </Route>
 
-        <Route path='/employee/statistics' element={<EmployeeStat />} />
+        {/* mentor routes */}
+          {/* private route */}
+          <Route path='/feedback/mentor' element={<GuardedRoute type={"mentor"} />} >
+            <Route path='/feedback/mentor' element={<MentorFeedback />} />
+          </Route>
+          <Route path='/mentorfeedback' element={<GuardedRoute type={"mentor"} />} >
+            <Route path='/mentorfeedback' element={<MentorFeedbackOptions />} />
+          </Route>
+          <Route path='/mentorfeedback/team' element={<GuardedRoute type={"mentor"} />} >
+            <Route path='/mentorfeedback/team' element={<MentorTeamFeedback />} />
+          </Route>
+          <Route path='/mentorfeedback/crossteam' element={<GuardedRoute type={"mentor"} />} >
+            <Route path='/mentorfeedback/crossteam' element={<CrossMentorTeamFeedback />} />
+          </Route>
+          <Route path='/mentorfeedback/crossteam/:crossteamid' element={<GuardedRoute type={"mentor"} />} >
+            <Route path='/mentorfeedback/crossteam/:crossteamid' element={<OtherTeams />} />
+          </Route>
+          <Route path='/feedback/crossmentor' element={<GuardedRoute type={"mentor"} />} >
+            <Route path='/feedback/crossmentor' element={<CrossMentorFeedback />} />
+          </Route>
+
+        {/* member routes */}
+          {/* private route */}
+          <Route path='/peerfeedback' element={<GuardedRoute type={"member"} />} >
+            <Route path='/peerfeedback' element={<PeerFeedbackOptions />} />
+          </Route>
+          <Route path='/feedback/peer' element={<GuardedRoute type={"member"} />} >
+            <Route path='/feedback/peer' element={<Peerfeedback />} />
+          </Route>
+          <Route path='/employee/statistics' element={<GuardedRoute type={"member"} />} >
+            <Route path='/employee/statistics' element={<EmployeeStat />} />
+          </Route>
       </Routes>
     </div>
   );

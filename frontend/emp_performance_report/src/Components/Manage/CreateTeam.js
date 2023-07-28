@@ -4,6 +4,9 @@ import './Manage.css'
 import axios from 'axios';
 import { backend_url } from '../../BackendRoute';
 import { useNavigate } from 'react-router';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 
 function CreateTeam() {
   const[teamid, setTeamid] = useState();
@@ -13,43 +16,64 @@ function CreateTeam() {
 
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
 
   async function getMentors(){
     try {
-      const res = await axios.get(backend_url+'/employee/');
-      console.log(res);
+      const res = await axios.get(backend_url+'/employee/', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });
       setMentors(res.data);
     } catch (error) {
       console.log(error);
     }
   }
 
-  useEffect(() => {
-    getMentors();
-  }, [])
-
-  async function addMentorFeedback(event){
+  
+  async function createNewTeam(event){
     event.preventDefault()
     try {
-      const res = await axios.post(backend_url+'/team/create', {teamid: teamid, mentorid: mentorid, team_description: teamDescription});
-      console.log(res);
+      const res = await axios.post(backend_url+'/team/create', {teamid: teamid, mentorid: mentorid, team_description: teamDescription}, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });
       if(res.status === 200){
-        alert("Team created successfully");
-        // navigate('/');
+        success("Team created successfully");
+        navigate('/');
       }
     } catch (error) {
       console.log(error);
-      alert("Something went wrong.");
+      notify("Something went wrong.");
     }
   }
+
+  const notify = (msg) => {
+    toast.error(msg, {
+      position: toast.POSITION.TOP_CENTER
+    });
+  };
+  
+  const success = (msg) => {
+      toast.success(msg, {
+      position: toast.POSITION.TOP_CENTER
+    });
+  }
+
+  useEffect(() => {
+    getMentors();
+  }, [])
 
   return (
     <div className="CrossMentorFeedback bg-[#f7e5ee] min-h-[100vh]">
     <Navbar />
     <div className="feedbackform w-2/5 bg-[#f7e5ee] flex justify-center items-center mx-auto py-14">
       <div className='w-full relative'>
-        {/* <img className='absolute left-0 right-0' style={{zIndex: -1}} src="/feedback.png" alt="" /> */}
-        <form className='min-h-[82vh] px-16 bg-[#FFF] shadow-2xl relative flex flex-col justify-center py-16 gap-4 gap-y-14' style={{backgroundColor: "rgba(255, 255, 255, 1", overflow: "hidden"}} onSubmit={(event) => addMentorFeedback(event)}>
+        <form className='min-h-[82vh] px-16 bg-[#FFF] shadow-2xl relative flex flex-col justify-center py-16 gap-4 gap-y-14' style={{backgroundColor: "rgba(255, 255, 255, 1", overflow: "hidden"}} onSubmit={(event) => createNewTeam(event)}>
             <h1 className='text-center pb-4 text-2xl uppercase' style={{letterSpacing: "1px"}}>Create New Team</h1>
             <input
         className='input border-b-[1px] px-1 text-sm mb-10'

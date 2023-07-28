@@ -6,9 +6,7 @@ function CrossMentorFeedback() {
   const [communication, setCommunication] = useState('');
   const [behaviour, setBehaviour] = useState('');
   const [responsibility, setResponsibility] = useState('');
-  const [deadline, setDeadline] = useState('');
-  const [workload, setWorkload] = useState('');
-  const [extrawork, setExtrawork] = useState('');
+
 
 
   const giveCommunicationRating = (event) => {
@@ -42,7 +40,6 @@ function CrossMentorFeedback() {
               <p className='pl-1'>Team id</p>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis of communication between 1 to 5">
-            {/* <p></p> */}
                   <select className="input border-b-[1px] bg-[transparent] pb-2 w-full bg-[#FFF]"  style={{outline: "none"}} value={communication} onChange={giveCommunicationRating}>
                   <option value="">communication</option>
                   <option value="option1">1</option>
@@ -53,7 +50,6 @@ function CrossMentorFeedback() {
                 </select>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis of behaviour between 1 to 5">
-                {/* <input className='input border-b-[1px] pb-2 w-full' type="email" style={{outline: "none"}} placeholder='enter your role'/> */}
                 <select className="input bg-[transparent] border-b-[1px] pb-2 w-full bg-[#FFF]"  style={{outline: "none"}} value={behaviour} onChange={giveBehaviourRating}>
                   <option value="">behaviour</option>
                   <option value="option1">1</option>
@@ -64,7 +60,6 @@ function CrossMentorFeedback() {
                 </select>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis responsibility between 1 to 5">
-                {/* <input className='input border-b-[1px] pb-2 w-full' type="email" style={{outline: "none"}} placeholder='enter your role'/> */}
                 <select className="input bg-[transparent] border-b-[1px] pb-2 w-full bg-[#FFF]"  style={{outline: "none"}} value={responsibility} onChange={giveResponsibilityRating}>
                   <option value="">responsibility</option>
                   <option value="option1">1</option>

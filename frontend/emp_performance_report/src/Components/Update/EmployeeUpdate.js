@@ -4,6 +4,8 @@ import Navbar from '../Navbar/Navbar'
 import axios from 'axios';
 import { backend_url } from '../../BackendRoute';
 import { useLocation, useNavigate } from 'react-router';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function EmployeeUpdate() {
   const [employees, setEmployees] = useState();
@@ -19,12 +21,18 @@ function EmployeeUpdate() {
   const navigate = useNavigate();
 
   const location = useLocation();
-  console.log(location);
+
+  const token = localStorage.getItem("token");
 
   async function getTeams(){
     try {
-      const res = await axios.get(backend_url+'/team/');
-      console.log(res);
+      const res = await axios.get(backend_url+'/team/', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          
+          'Content-Type': 'application/json',
+        }
+      });
       setTeams(res.data);
     } catch (error) {
       console.log(error);
@@ -34,8 +42,13 @@ function EmployeeUpdate() {
   
   async function setEmployeeDefaultData(){
     try {
-      const res = await axios.get(backend_url+'/employeeDetail/'+location.state.empid);
-      console.log(res);
+      const res = await axios.get(backend_url+'/employeeDetail/'+location.state.empid, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          
+          'Content-Type': 'application/json',
+        }
+      });
       setEmployeeEmail(res.data.email);
       setEmployeeAddress(res.data.address);
       setRole(res.data.role)
@@ -50,20 +63,37 @@ function EmployeeUpdate() {
     event.preventDefault()
     if(employeeId != null || employeeName != null || employeeEmail != null || employeePassword != null || employeeAddress != null || team != null){
       try {
-        const res2 = await axios.put(backend_url + "/employeeDetail/update", {empid: employeeId, email: employeeEmail, password: employeePassword, address: employeeAddress, teamid: team, role: role});
-        console.log(res2);
+        const res2 = await axios.put(backend_url + "/employeeDetail/update", {empid: employeeId, email: employeeEmail, password: employeePassword, address: employeeAddress, teamid: team, role: role}, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            
+            'Content-Type': 'application/json',
+          }
+        });
         if(res2.status === 200){
-          alert("Employee updated successfully");
+          success("Employee updated successfully");
           navigate('/hr/employees');
         }
       } catch (error) {
         console.log(error);
-        alert("Something went wrong.");
+        notify("Something went wrong.");
       }
     }
     console.log(employeeId, employeeEmail, employeePassword, employeeAddress, team, role);
   }
   
+  const notify = (msg) => {
+    toast.error(msg, {
+      position: toast.POSITION.TOP_CENTER
+    });
+  };
+  
+  const success = (msg) => {
+      toast.success(msg, {
+      position: toast.POSITION.TOP_CENTER
+    });
+  }
+
   useEffect(() => {
     getTeams();
     setEmployeeDefaultData();
@@ -74,7 +104,6 @@ function EmployeeUpdate() {
     <Navbar />
     <div className="feedbackform w-2/5 bg-[#f7e5ee] flex justify-center items-center mx-auto py-14">
       <div className='w-full relative'>
-        {/* <img className='absolute left-0 right-0' style={{zIndex: -1}} src="/feedback.png" alt="" /> */}
         <form className='min-h-[82vh] bg-[#FFF] shadow-2xl px-10 flex flex-col justify-center py-16 gap-4 gap-y-14' style={{backgroundColor: "rgba(255, 255, 255, 1"}} onSubmit={(event) => addMember(event)}>
             <h1 className='text-center pb-4 text-2xl uppercase' style={{letterSpacing: "1px"}}>Update employee detail</h1>
             <div className='input border-b-[1px] px-1 text-sm pb-1'>Emp id: {location.state.empid}</div>

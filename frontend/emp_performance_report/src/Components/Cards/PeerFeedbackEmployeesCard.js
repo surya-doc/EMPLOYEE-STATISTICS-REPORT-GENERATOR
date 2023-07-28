@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router'
 
 function PeerFeedbackEmployeesCard({employee, feedbacker}) {
     const navigate = useNavigate();
-    console.log(feedbacker, employee);
   return (
     <div className="peerfeedbackemployees flex items-center border-[1px] w-[60vw] my-4 shadow-lg cursor-pointer rounded-md py-4 pl-10">
     <div className="nameLogo bg-[#E6E6E6] text-[2rem] font-bold w-16 h-16 py-4 flex items-center justify-center px-8">{employee.name.substring(0, 2)}

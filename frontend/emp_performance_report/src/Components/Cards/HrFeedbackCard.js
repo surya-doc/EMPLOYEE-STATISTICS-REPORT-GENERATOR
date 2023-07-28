@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router'
 
-function HrFeedbackCard({employee}) {
+function HrFeedbackCard({employee, team}) {
   const navigate = useNavigate();
   return (
     <div className="peerfeedbackemployees flex items-center border-[1px] w-[60vw] my-4 shadow-lg cursor-pointer rounded-md py-4 pl-10">
@@ -13,6 +13,10 @@ function HrFeedbackCard({employee}) {
     </div>
     <div className="right w-full px-8 flex justify-between">
         <div className=''>
+            <div className='flex items-center gap-2 pt-2'>
+                <h5>Employee id: </h5>
+                <p>{employee.empid}</p>
+            </div>
             <div className='flex items-center gap-2 py-2'>
                 <h5>Name: </h5>
                 <p>{employee.name}</p>
@@ -21,17 +25,13 @@ function HrFeedbackCard({employee}) {
                 <h5>Email: </h5>
                 <p>{employee.email}</p>
             </div>            
-            <div className='flex items-center gap-2 py-2'>
-                <h5>Team: </h5>
-                <p>{employee.teamid}</p>
-            </div>
         </div>
         <div className='justify-end'>
             <div className='flex items-center gap-2'>
                 <h5>Attendance</h5>
                 <p>{employee.attendance}</p>
             </div>
-            <div className="feedbact_btn bg-[#fdca0e] flex items-center justify-center py-1 mt-6 border-r-[2px] border-b-[3px] border-[#ffa500] rounded-md shadow-md" onClick={() => navigate('/feedback/hrfeedback', {state: employee})}>
+            <div className="feedbact_btn bg-[#fdca0e] flex items-center justify-center py-1 mt-6 border-r-[2px] border-b-[3px] border-[#ffa500] rounded-md shadow-md" onClick={() => navigate('/feedback/hrfeedback', {state: {employee, team}})}>
               Feedback
             </div>
         </div>

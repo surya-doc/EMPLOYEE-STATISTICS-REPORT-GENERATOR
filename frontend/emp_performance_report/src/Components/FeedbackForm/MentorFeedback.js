@@ -4,6 +4,9 @@ import './FeedbackOptions.css'
 import { useLocation, useNavigate } from 'react-router';
 import axios from 'axios';
 import { backend_url } from '../../BackendRoute';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { postApiCall } from '../APICall/apipost';
 
 function MentorFeedback() {
   const [communication, setCommunication] = useState('');
@@ -14,7 +17,6 @@ function MentorFeedback() {
   const [extrawork, setExtrawork] = useState('');
 
   const location = useLocation();
-  console.log(location);
 
   const navigate = useNavigate();
 
@@ -40,15 +42,35 @@ function MentorFeedback() {
   async function addMentorFeedback(event){
     event.preventDefault()
     try {
-      const res = await axios.post(backend_url+'/mentorFeedback/create', {empid: location.state.employee.empid, mentorid: localStorage.getItem('id'), empteamid: location.state.employee.teamid, mentorteamid: location.state.mentor.teamid, communication, behaviour, responsibility, deadline, workload, extrawork});
-      console.log(res);
+      const url = backend_url+'/mentorFeedback/create';
+      const body = {empid: location.state.employee.empid, mentorid: localStorage.getItem('id'), empteamid: location.state.employee.teamid, mentorteamid: location.state.mentor.teamid, communication, behaviour, responsibility, deadline, workload, extrawork};
+      const token = localStorage.getItem("token");
+      const res = await postApiCall(url, body, token);
       if(res.status === 200){
-        alert("Your response got submitted successfully.");
+        success("Your response got submitted successfully.");
         navigate('/');
       }
     } catch (error) {
+      if(error.response.status === 404){
+        notify(error.response.data);
+      }
+      else{
+        notify("Something went wrong!!");
+      }
       console.log(error);
     }
+  }
+
+  const notify = (msg) => {
+    toast.error(msg, {
+      position: toast.POSITION.TOP_CENTER
+    });
+  };
+  
+  const success = (msg) => {
+      toast.success(msg, {
+      position: toast.POSITION.TOP_CENTER
+    });
   }
 
   return (
@@ -68,11 +90,7 @@ function MentorFeedback() {
             <div className="peerid border-b-[1px] pb-2 my-4">
               <p className='pl-1'>{location.state.employee.empid}</p>
             </div>
-            {/* <div className="peerid border-b-[1px] pb-2 my-4">
-              <p className='pl-1'>Team id</p>
-            </div> */}
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis of communication between 1 to 5">
-            {/* <p></p> */}
                   <select className="input border-b-[1px] bg-[transparent] pb-2 w-full bg-[#FFF]" required style={{outline: "none"}} value={communication} onChange={giveCommunicationRating}>
                   <option value="">communication</option>
                   <option value={1}>1</option>
@@ -83,7 +101,6 @@ function MentorFeedback() {
                 </select>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis of behaviour between 1 to 5">
-                {/* <input className='input border-b-[1px] pb-2 w-full' type="email" style={{outline: "none"}} placeholder='enter your role'/> */}
                 <select className="input bg-[transparent] border-b-[1px] pb-2 w-full bg-[#FFF]" required style={{outline: "none"}} value={behaviour} onChange={giveBehaviourRating}>
                   <option value="">behaviour</option>
                   <option value={1}>1</option>
@@ -94,7 +111,6 @@ function MentorFeedback() {
                 </select>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis responsibility between 1 to 5">
-                {/* <input className='input border-b-[1px] pb-2 w-full' type="email" style={{outline: "none"}} placeholder='enter your role'/> */}
                 <select className="input bg-[transparent] border-b-[1px] pb-2 w-full bg-[#FFF]" required style={{outline: "none"}} value={responsibility} onChange={giveResponsibilityRating}>
                   <option value="">responsibility</option>
                   <option value={1}>1</option>
@@ -106,7 +122,6 @@ function MentorFeedback() {
             </div>
 
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis of deadline met between 1 to 5">
-            {/* <p></p> */}
                   <select className="input border-b-[1px] bg-[transparent] pb-2 w-full bg-[#FFF]" required style={{outline: "none"}} value={deadline} onChange={giveDeadlineRating}>
                   <option value="">Deadline</option>
                   <option value={1}>1</option>
@@ -117,7 +132,6 @@ function MentorFeedback() {
                 </select>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis of taking workload between 1 to 5">
-                {/* <input className='input border-b-[1px] pb-2 w-full' type="email" style={{outline: "none"}} placeholder='enter your role'/> */}
                 <select className="input bg-[transparent] border-b-[1px] pb-2 w-full bg-[#FFF]" required style={{outline: "none"}} value={workload} onChange={giveWorkloadRating}>
                   <option value="">workload</option>
                   <option value={1}>1</option>
@@ -128,7 +142,6 @@ function MentorFeedback() {
                 </select>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on extra work done in between 1 to 5">
-                {/* <input className='input border-b-[1px] pb-2 w-full' type="email" style={{outline: "none"}} placeholder='enter your role'/> */}
                 <select className="input bg-[transparent] border-b-[1px] pb-2 w-full bg-[#FFF]" required style={{outline: "none"}} value={extrawork} onChange={giveExtraWorkRating}>
                   <option value="">extra work</option>
                   <option value={1}>1</option>

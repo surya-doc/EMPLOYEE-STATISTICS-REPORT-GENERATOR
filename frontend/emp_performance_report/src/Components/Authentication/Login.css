@@ -12,3 +12,7 @@
 .input:focus{
     border-bottom: 1px solid #A62868;
 }
+
+.input_otp:focus{
+    border: 1px solid #A62868;
+}

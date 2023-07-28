@@ -4,6 +4,8 @@ import './FeedbackOptions.css'
 import { useLocation, useNavigate } from 'react-router';
 import axios from 'axios';
 import { backend_url } from '../../BackendRoute';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function Peerfeedback() {  
   const [communication, setCommunication] = useState('');
@@ -11,7 +13,6 @@ function Peerfeedback() {
   const [responsibility, setResponsibility] = useState('');
 
   const location = useLocation();
-  console.log(location);
 
   const navigate = useNavigate();
 
@@ -25,19 +26,38 @@ function Peerfeedback() {
     setResponsibility(event.target.value);
   };
 
+  const token = localStorage.getItem("token");
+
 
   async function addPeerFeedback(event){
     event.preventDefault()
     try {
-      const res = await axios.post(backend_url+'/peerFeedback/create', {empid: location.state.feedbacker.empid, peerid: location.state.employee.empid, teamid: location.state.employee.teamid, communication, behaviour, responsibility: responsibility});
-      console.log(res);
+      const res = await axios.post(backend_url+'/peerFeedback/create', {empid: location.state.feedbacker.empid, peerid: location.state.employee.empid, teamid: location.state.employee.teamid, communication, behaviour, responsibility: responsibility}, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });
       if(res.status === 200){
-        alert("Your response got submitted successfully.");
+        success("Your response got submitted successfully.");
         navigate('/peerfeedback');
       }
     } catch (error) {
+      notify("Something went wrong!!");
       console.log(error);
     }
+  }
+
+  const notify = (msg) => {
+    toast.error(msg, {
+      position: toast.POSITION.TOP_CENTER
+    });
+  };
+  
+  const success = (msg) => {
+      toast.success(msg, {
+      position: toast.POSITION.TOP_CENTER
+    });
   }
 
   return (
@@ -58,7 +78,6 @@ function Peerfeedback() {
               <p className='pl-1'>{location.state.employee.empid}</p>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis of communication between 1 to 5">
-            {/* <p></p> */}
                   <select className="input border-b-[1px] bg-[transparent] pb-2 w-full bg-[#FFF]" required style={{outline: "none"}} value={communication} onChange={giveCommunicationRating}>
                   <option value="">communication</option>
                   <option value={1}>1</option>
@@ -69,7 +88,6 @@ function Peerfeedback() {
                 </select>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis of behaviour between 1 to 5">
-                {/* <input className='input border-b-[1px] pb-2 w-full' type="email" style={{outline: "none"}} placeholder='enter your role'/> */}
                 <select className="input bg-[transparent] border-b-[1px] pb-2 w-full bg-[#FFF]" required style={{outline: "none"}} value={behaviour} onChange={giveBehaviourRating}>
                   <option value="">behaviour</option>
                   <option value={1}>1</option>
@@ -80,7 +98,6 @@ function Peerfeedback() {
                 </select>
             </div>
             <div className='my-4 tooltip fade' data-title="Give feedback on the basis responsibility between 1 to 5">
-                {/* <input className='input border-b-[1px] pb-2 w-full' type="email" style={{outline: "none"}} placeholder='enter your role'/> */}
                 <select className="input bg-[transparent] border-b-[1px] pb-2 w-full bg-[#FFF]" required style={{outline: "none"}} value={responsibility} onChange={giveResponsibilityRating}>
                   <option value="">responsibility</option>
                   <option value={1}>1</option>
