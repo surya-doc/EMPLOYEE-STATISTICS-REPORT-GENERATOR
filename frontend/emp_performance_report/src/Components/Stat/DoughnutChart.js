@@ -11,7 +11,7 @@ function DoughnutChart({total, present}) {
           backgroundColor: ['#671940', '#e698c0', '#E3E2E3'],
           borderColor: 'rgba(0,0,0,1)',
           borderWidth: 1,
-          cutout: 130,
+          cutout: 70,
         }],
         labels: ['Present', 'Absent', 'total'],        
       };
@@ -22,6 +22,7 @@ function DoughnutChart({total, present}) {
             data={data}
             options={{
             responsive: true,
+            aspectRatio: 1
             }}
         />
     </div>

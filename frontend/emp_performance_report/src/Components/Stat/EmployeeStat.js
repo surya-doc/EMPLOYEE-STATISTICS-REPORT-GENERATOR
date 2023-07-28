@@ -11,6 +11,8 @@ import BarChart from './BarChart';
 import DoughnutChart from './DoughnutChart';
 import PieChart from './PieChart';
 
+import html2pdf from 'html2pdf.js';
+
 ChartJs.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
 function EmployeeStat() {
@@ -26,25 +28,28 @@ function EmployeeStat() {
 
     const empid = localStorage.getItem('id');
 
-
+    const token = localStorage.getItem("token");
+    
 
     async function getEmployeeDetail(){
         try {
-
-            const res = await axios.get(backend_url+'/employeeDetail/'+empid);
-            const emp = await axios.get(backend_url+'/employee/'+empid);
-            console.log(emp);
+            const res = await axios.get(backend_url+'/employeeDetail/'+empid, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              }
+            });
+            const emp = await axios.get(backend_url+'/employee/'+empid, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              }
+            });
             res.data.name = emp.data.name;
-            // emp.data.total_working_days
             setTotalWorkingDays(30);
             setAttendance(emp.data.attendance);
-            if(res.status === 200){
-                for(let i=0; i<res.data.length; i++){
-                    // console.log(res.data[i]);
-                }
-            }
+            
             setEmployee(res.data);
-            // console.log("*******************", res);
             setTeamId(res.data.teamid);
           } catch (error) {
             console.log(error);
@@ -55,8 +60,12 @@ function EmployeeStat() {
 
     async function getStatistics(){
       try {
-        const res = await axios.get(backend_url+'/calculate/'+empid);
-        // console.log(res);
+        const res = await axios.get(backend_url+'/calculate/'+empid, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        });
         setStat(res.data);
       } catch (error) {
         console.log(error);
@@ -69,14 +78,22 @@ function EmployeeStat() {
       let tempArr = [];
       let tempStatPercentile = [];
       let teamBarLevelArr = [];
-      // console.log("(*************************", employee?.teamid)
       try {
-        const res = await axios.get(backend_url+'/employeeDetail/byteam/'+teamid+'/member');
-        // console.log(res);
+        const res = await axios.get(backend_url+'/employeeDetail/byteam/'+teamid+'/member', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        });
         setEmployees(res.data);
         for(var i=0; i<res.data.length; i++){
           try {
-            const teamStat = await axios.get(backend_url+'/calculate/'+res.data[i].empid);
+            const teamStat = await axios.get(backend_url+'/calculate/'+res.data[i].empid, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              }
+            });
             tempArr.push(teamStat.data);
             tempStatPercentile.push(Math.round(teamStat.data.percentile));
             teamBarLevelArr.push('id: '+teamStat.data.empid)
@@ -87,12 +104,24 @@ function EmployeeStat() {
         setTeamStat(tempArr);
         setTeamBarStat(tempStatPercentile);
         setTeamBarLabel(teamBarLevelArr);
-        // console.log(tempArr, teamBarLevelArr, tempStatPercentile);
       } catch (error) {
         console.log(error);
       }
       console.log(tempArr);
     }
+
+    const handleDownloadPDF = () => {
+      const element = document.getElementById('analytics-page');
+      const opt = {
+        margin: 1,
+        filename: 'analytics_page.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 1 },
+        jsPDF: { unit: 'cm', format: 'a2', orientation: 'portrait' },
+      };
+  
+      html2pdf().from(element).set(opt).save();
+    };
 
     useEffect(() => {
         getEmployeeDetail();
@@ -101,10 +130,10 @@ function EmployeeStat() {
   return (
     <div className="employeestat">
         <Navbar />
-        <div className="statcontainer min-h-[94vh] bg-[#f1f1f1] flex justify-between">
-            <div className='w-4/12 h-full bg-[#f1f1f1] p-2'>
-              <div className="detailscard bg-[#FFF] py-5">
-                <div className="mx-auto w-full flex flex-col items-center">
+        <div id="analytics-page" className="statcontainer min-h-[94vh] bg-[#f1f1f1] flex justify-between pt-2 px-2 md:flex-col">
+            <div className='w-4/12 h-full bg-[#f1f1f1] p-2 md:flex md:w-[100%] md:p-0'>
+              <div className="detailscard bg-[#FFF] py-5 md:w-5/12">
+                <div className="mx-auto w-full flex flex-col items-center md:mx-1">
                   <div className="nameLogo border-[2px] border-[#000000] bg-[#A62868] text-[#FFF] text-[2rem] font-bold w-16 h-16 py-4 flex items-center justify-center px-8">{employee?.name.substring(0, 2)}
                 </div>
                 <h1 className='text-lg pt-4' style={{letterSpacing: "1px"}}>{employee?.name}</h1>
@@ -119,149 +148,158 @@ function EmployeeStat() {
                 </div>
               </div>
               </div>
-              <div className="statcards">
-                <div className="statnumber text-xl flex">
-                  <h4>Behaviour</h4>
-                  <div className="star">
-                    <div className='flex'>
-                      <div className="colorstar flex">
-                        {Array.from({ length: stat?.behaviour }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="notcolourstar flex">
-                        {Array.from({ length: 5-stat?.behaviour }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#E1DFDB]' />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="statnumber text-xl communication">
-                  <h4>Communication</h4>
-                  <div className="star">
-                    <div className='flex'>
-                      <div className="colorstar flex">
-                        {Array.from({ length: stat?.communication }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="notcolourstar flex">
-                        {Array.from({ length: 5-stat?.communication }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#E1DFDB]' />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>                
-                </div>
-                <div className="statnumber text-xl deadline">
-                  <h4>Deadline</h4>
-                  <div className="star">
-                    <div className='flex'>
-                      <div className="colorstar flex">
-                        {Array.from({ length: stat?.deadline }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="notcolourstar flex">
-                        {Array.from({ length: 5-stat?.deadline }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#E1DFDB]' />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>                
-                </div>
-                <div className="statnumber text-xl extrawork">
-                  <h4>Extrawork</h4>
-                  <div className="star">
-                    <div className='flex'>
-                      <div className="colorstar flex">
-                        {Array.from({ length: stat?.extrawork }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="notcolourstar flex">
-                        {Array.from({ length: 5-stat?.extrawork }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#E1DFDB]' />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="statnumber text-xl responsibility">
-                  <h4>Responsibility</h4>
-                  <div className="star">
-                    <div className='flex'>
-                      <div className="colorstar flex">
-                        {Array.from({ length: stat?.responsibility }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="notcolourstar flex">
-                        {Array.from({ length: 5-stat?.responsibility }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#E1DFDB]' />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>                
-                </div>
-                <div className="statnumber text-xl workload">
+              <div className="statcards md:w-7/12">
 
-                  <h4>Workload</h4>
-                  <div className="star">
-                    <div className='flex'>
-                      <div className="colorstar flex">
-                        {Array.from({ length: stat?.workload }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="notcolourstar flex">
-                        {Array.from({ length: 5-stat?.workload }).map((element, index) => (
-                          <div key={index+1}>
-                            <AiTwotoneStar className='text-[#E1DFDB]' />
-                          </div>
-                        ))}
+                <div className='md:flex md:w-full'>
+                  <div className="statnumber md:w-1/2 md:mx-2 items-center justify-between text-xl md:flex-col p-[28px] my-[10px] md:p-[10px] md:text-base sm:text-sm flex md:flex-col md:gap-2">
+                    <h4>Behaviour</h4>
+                    <div className="star">
+                      <div className='flex'>
+                        <div className="colorstar flex">
+                          {Array.from({ length: stat?.behaviour }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="notcolourstar flex">
+                          {Array.from({ length: 5-stat?.behaviour }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#E1DFDB]' />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>                
+                  </div>
+                  <div className="statnumber md:w-1/2 md:mx-2 items-center justify-between text-xl md:flex-col p-[28px] my-[10px] md:p-[10px] md:text-base sm:text-sm communication">
+                    <h4>Communication</h4>
+                    <div className="star">
+                      <div className='flex'>
+                        <div className="colorstar flex">
+                          {Array.from({ length: stat?.communication }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="notcolourstar flex">
+                          {Array.from({ length: 5-stat?.communication }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#E1DFDB]' />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>                
+                  </div>
+                </div>
+
+                <div className='md:flex md:w-full'>
+                  <div className="statnumber md:w-1/2 md:mx-2 items-center justify-between text-xl md:flex-col p-[28px] my-[10px] md:p-[10px] md:text-base sm:text-sm deadline">
+                    <h4>Deadline</h4>
+                    <div className="star">
+                      <div className='flex'>
+                        <div className="colorstar flex">
+                          {Array.from({ length: stat?.deadline }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="notcolourstar flex">
+                          {Array.from({ length: 5-stat?.deadline }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#E1DFDB]' />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>                
+                  </div>
+                  <div className="statnumber md:w-1/2 md:mx-2 items-center justify-between text-xl md:flex-col p-[28px] my-[10px] md:p-[10px] md:text-base sm:text-sm extrawork">
+                    <h4>Extrawork</h4>
+                    <div className="star">
+                      <div className='flex'>
+                        <div className="colorstar flex">
+                          {Array.from({ length: stat?.extrawork }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="notcolourstar flex">
+                          {Array.from({ length: 5-stat?.extrawork }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#E1DFDB]' />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className='md:flex md:w-full'>
+                  <div className="statnumber md:w-1/2 md:mx-2 items-center justify-between text-xl md:flex-col p-[28px] my-[10px] md:p-[10px] md:text-base sm:text-sm responsibility">
+                    <h4>Responsibility</h4>
+                    <div className="star">
+                      <div className='flex'>
+                        <div className="colorstar flex">
+                          {Array.from({ length: stat?.responsibility }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="notcolourstar flex">
+                          {Array.from({ length: 5-stat?.responsibility }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#E1DFDB]' />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>                
+                  </div>
+                  <div className="statnumber md:w-1/2 md:mx-2 items-center justify-between text-xl md:flex-col p-[28px] my-[10px] md:p-[10px] md:text-base sm:text-sm workload">
+
+                    <h4>Workload</h4>
+                    <div className="star">
+                      <div className='flex'>
+                        <div className="colorstar flex">
+                          {Array.from({ length: stat?.workload }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#fdca0e] text-shadow-md' />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="notcolourstar flex">
+                          {Array.from({ length: 5-stat?.workload }).map((element, index) => (
+                            <div key={index+1}>
+                              <AiTwotoneStar className='text-[#E1DFDB]' />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>                
+                  </div>
                 </div>
               </div>
             </div>
-            <div className='w-8/12 bg-[#f1f1f1]'>
-              <div className='py-4 px-16 bg-[#FFF] my-2 mr-2'>
+            <div className='w-8/12 bg-[#f1f1f1] md:w-[100%]'>
+              <div className='py-4 px-16 bg-[#FFF] my-2 mr-2 md:w-full'>
                 <h1 className='text-lg py-2'>Employee statistics of team: {employee?.teamid}</h1>
                 {
                   teamStat?<BarChart teams={teamStat} teamData={teamBarStat} teamLabels={teamBarLabel} />:
                   console.log(teamBarLabel, teamBarStat, teamStat.length)
                 }
               </div>
-              <div className='flex justify-between'>
-                <div className='w-1/2 bg-[#FFF] mr-2 pb-4'>
+              <div className='flex justify-between mr-2 lg:flex-col'>
+                <div className='w-1/2 bg-[#FFF] mr-2 lg:w-full'>
                   <DoughnutChart total={totalWorkingDays} present={attendance} />
                 </div>
-                <div className='w-1/2 bg-[#FFF] pb-4'>
+                <div className='w-1/2 bg-[#FFF] pb-4 lg:w-full'>
                   <PieChart
                     behaviour={stat?.behaviour}
                     communication={stat?.communication}
@@ -270,6 +308,11 @@ function EmployeeStat() {
                     responsibility={stat?.responsibility}
                     workload={stat?.workload}
                   />
+                </div>
+              </div>
+              <div className='w-full my-4'>
+                <div className='w-40 mx-auto bg-[#E4BED1] p-2'>
+                  <button className='mx-auto w-36 bg-[#A62868] p-1 text-[#FFF]' onClick={handleDownloadPDF}>Download PDF</button>
                 </div>
               </div>
             </div>

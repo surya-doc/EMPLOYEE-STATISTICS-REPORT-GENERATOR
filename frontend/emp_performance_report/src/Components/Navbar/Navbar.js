@@ -1,18 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { useNavigate } from 'react-router';
+import { backend_url } from '../../BackendRoute';
+import { getapiCall } from '../APICall/apiget';
+import jwtDecode from 'jwt-decode';
 
 function Navbar() {
   const[stat, setStat] = useState(false);
   const[isLoggedIn, setIsLoggedIn] = useState(false);
   const[name, setName] = useState();
   const[profile, setProfile] = useState(false);
+  const[role, setRole] = useState();
 
   const navigate = useNavigate();
 
+  const id = localStorage.getItem("id");
+  const token = localStorage.getItem("token");
+
   function checkFeedbacker(){
-    const type = localStorage.getItem('type');
-    console.log("type");
+    const token = localStorage.getItem('token');
+    var type = jwtDecode(token);
+    type = type.role[0].authority
+    console.log(type);
     if(type === "member"){
       navigate("/peerfeedback");
     }
@@ -33,8 +42,37 @@ function Navbar() {
     localStorage.removeItem("id");
     localStorage.removeItem("type");
     localStorage.removeItem("name");
+    localStorage.removeItem("token");
     navigate("/");
     reloadPage();
+  }
+
+  async function check(){
+    try {
+      const url = `${backend_url}/employeeDetail/${id}`;
+      const res = await getapiCall(url, token);
+
+      console.log(res);
+      if(res.status === 200 && res.data.role === "hr"){
+        console.log("*")
+        setRole(res.data.role);
+      }
+      else if(res.status === 200 && res.data.role === "member"){
+        setRole(res.data.role);
+      }
+      else{
+        setRole(res.data.role);
+      }
+    } catch (error) {
+      console.log(error);
+      if(error.response.status === 401){
+        localStorage.removeItem("email");
+        localStorage.removeItem("id");
+        localStorage.removeItem("type");
+        localStorage.removeItem("name");
+        // navigate('/login');
+      }
+    }
   }
 
   useEffect(() => {
@@ -58,8 +96,6 @@ function Navbar() {
             <MdKeyboardArrowDown />
           </div>
           <div className={`signupoptions absolute ${stat ? 'block' : 'hidden'} top-9 -left-6 text-sm bg-[#FFF] w-40 shadow-md`}>
-            {/* <div className='py-2 border-b-[1px] hover:bg-[#F3F3F3] px-2 cursor-pointer' onClick={() => navigate('/signup/employee')}>Signup as team member</div> */}
-            {/* <div className='py-2 border-b-[1px] hover:bg-[#F3F3F3] px-2 cursor-pointer' onClick={() => navigate('/signup/mentor')}>Signup as team mentor</div> */}
             <div className='py-2 hover:bg-[#F3F3F3] px-2 cursor-pointer' onClick={() => navigate('/signup/hr')}>Signup as HR</div>
           </div>
         </div>
@@ -69,12 +105,17 @@ function Navbar() {
             <p className='py-2 border-b-[1px] min-w-[8rem]'>{localStorage.getItem('name')}</p>
             <p className='py-2 border-b-[1px] min-w-[8rem]'>{localStorage.getItem('email')}</p>
             <p className='py-2 border-b-[1px] min-w-[8rem]'>emp id: {localStorage.getItem('id')}</p>
-            <div className='mx-auto w-full flex'>
-              <button className='bg-[#A62868] py-1 px-2 mt-4 mb-2 mx-auto text-[#FFF] rounded-sm' onClick={() => logOut()}>Logout</button>
+            <div className='flex'>
+              <div className={`mx-auto w-full flex`}>
+                <button className='bg-[#A62868] py-1 px-2 mt-4 mb-2 mx-auto text-[#FFF] rounded-sm' onClick={() => navigate("/update")}>Update</button>
+              </div>
+              <div className='mx-auto w-full flex'>
+                <button className='bg-[#A62868] py-1 px-2 mt-4 mb-2 mx-auto text-[#FFF] rounded-sm' onClick={() => logOut()}>Logout</button>
+              </div>
             </div>
           </div>
         </div>
-        <div className='feedback cursor-pointer hover:text-[#A62868]' onClick={() => checkFeedbacker()}>
+        <div className={`feedback ${isLoggedIn ? 'block' : 'hidden'} cursor-pointer hover:text-[#A62868]`} onClick={() => checkFeedbacker()}>
           Feedback
         </div>
       </div>

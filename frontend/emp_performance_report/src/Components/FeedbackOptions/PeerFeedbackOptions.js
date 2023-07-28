@@ -4,37 +4,6 @@ import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
 import { backend_url } from '../../BackendRoute';
 
-
-var employees = [
-    {
-      empid: 1,
-      name: "John Doe",
-      email: "john.doe@example.com",
-      password: "password123",
-      status: true,
-      attendance: 90,
-      teamid: 1
-    },
-    {
-      empid: 2,
-      name: "Jane Smith",
-      email: "jane.smith@example.com",
-      password: "password456",
-      status: true,
-      attendance: 95,
-      teamid: 1
-    },
-    {
-      empid: 3,
-      name: "Mike Johnson",
-      email: "mike.johnson@example.com",
-      password: "password789",
-      status: true,
-      attendance: 85,
-      teamid: 2
-    }
-  ];
-
 function PeerFeedbackOptions() {
   const[employees, setEmployees] = useState([]);
   const[employee, setEmployee] = useState();
@@ -43,51 +12,72 @@ function PeerFeedbackOptions() {
 
   const empId = localStorage.getItem('id');
 
+  const token = localStorage.getItem("token");
+
   async function getTeamDetails(){
     let empDetails = '';
     try {
-      empDetails = await axios.get(backend_url+'/employeeDetail/'+empId);
-      console.log(empDetails, empDetails.data.teamid);
+      empDetails = await axios.get(backend_url+'/employeeDetail/'+empId, {
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+          'Content-Type': 'application/json',
+        }
+      });
       setEmployee(empDetails.data);
     } catch (error) {
-      
       console.log(error);
     }
     try {
-      const res = await axios.get(backend_url+'/employeeDetail/byteam/'+empDetails.data.teamid+'/member');
-      console.log(res);
+      const res = await axios.get(backend_url+'/employeeDetail/byteam/'+empDetails.data.teamid+'/member', {
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+          'Content-Type': 'application/json',
+        }
+      });
       if(res.status === 200){
         for(let i=0; i<res.data.length; i++){
-          console.log(res.data[i]);
-          const employee = await axios.get(backend_url+'/employee/'+res.data[i].empid);
-          console.log(employee);
+          const employee = await axios.get(backend_url+'/employee/'+res.data[i].empid, {
+            headers: {
+              'Authorization': `Bearer ${token}`, 
+              'Content-Type': 'application/json',
+            }
+          });
           res.data[i].name = employee.data.name;
         }
       }
       setEmployees(res.data);
     } catch (error) {
-      
       console.log(error);
     }
     try {
-      const res = await axios.get(backend_url+'/employeeDetail/byteam/'+empDetails.data.teamid+'/mentor');
-      console.log(res);
+      const res = await axios.get(backend_url+'/employeeDetail/byteam/'+empDetails.data.teamid+'/mentor', {
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+          'Content-Type': 'application/json',
+        }
+      });
       if(res.status === 200){
         for(let i=0; i<res.data.length; i++){
-          console.log(res.data[i]);
-          const employee = await axios.get(backend_url+'/employee/'+res.data[i].empid);
-          console.log(employee);
+          const employee = await axios.get(backend_url+'/employee/'+res.data[i].empid, {
+            headers: {
+              'Authorization': `Bearer ${token}`, 
+              'Content-Type': 'application/json',
+            }
+          });
           res.data[i].name = employee.data.name;
         }
       }
       setTeam(res.data[0]);
     } catch (error) {
-      
       console.log(error);
     }
     try {
-      const teamDetails = await axios.get(backend_url+'/team/'+empDetails.data.teamid);
-      console.log(teamDetails);
+      const teamDetails = await axios.get(backend_url+'/team/'+empDetails.data.teamid, {
+        headers: {
+          'Authorization': `Bearer ${token}`, 
+          'Content-Type': 'application/json',
+        }
+      });
       setTeamDetails(teamDetails.data)
     } catch (error) {
       console.log(error);
@@ -113,7 +103,6 @@ function PeerFeedbackOptions() {
                     return employee.empid !== emp.empid ?<div>
                         <PeerFeedbackEmployeesCard employee={emp} feedbacker={employee}/>
                     </div> : 
-                    // console.log(emp, employee)
                     console.log("You.", team)
                 })
             }

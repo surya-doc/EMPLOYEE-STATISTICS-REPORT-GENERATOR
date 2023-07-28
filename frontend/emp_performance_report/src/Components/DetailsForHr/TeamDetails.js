@@ -11,10 +11,16 @@ function TeamDetails() {
 
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+
   async function getTeams(){
     try {
-      const res = await axios.get(backend_url+'/team/');
-      console.log(res);
+      const res = await axios.get(backend_url+'/team/', {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Set the JWT token in the Authorization header
+          'Content-Type': 'application/json', // Set the content type to JSON, adjust as needed
+        }
+      });
       setTeams(res.data);
     } catch (error) {
       console.log(error);
@@ -28,10 +34,6 @@ function TeamDetails() {
   return (
     <div>
         <Navbar />
-        {/* <div className="teamdetails flex flex-col items-center pt-6 pb-4">
-            <div className="teamid font-semibold">Team id: <span className='text-base text-[#A62868] pl-4'>1</span></div>
-            <div className="teammentor font-semibold">Team mentor: <span className='text-base text-[#A62868] uppercase pl-4'>abcd</span></div>
-        </div> */}
       <div className='flex justify-between max-w-[80%] mx-auto mt-10'>
         <h4 className='text-2xl text-[#000000] uppercase' style={{letterSpacing: "1px"}}>Teams</h4>
         <div className="addbtn flex items-center gap-2 border-[2px] py-1 px-4 rounded-xl cursor-pointer"  onClick={() => navigate('/manage/createteam')}>
@@ -50,9 +52,11 @@ function TeamDetails() {
         <div className="members max-w-[78%] mx-auto">
             {
                 teams.map((team, index) => {
-                    return <div key={index+1}>
+                    return team.teamid !== 1 ? <div key={index+1}>
                         <TeamsCard team={team} />
                     </div>
+                    :
+                    null
                 })
             }
         </div>
