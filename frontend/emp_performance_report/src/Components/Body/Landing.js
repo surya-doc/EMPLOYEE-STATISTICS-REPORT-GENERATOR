@@ -48,6 +48,7 @@ function Landing() {
     try {
       const res = await axios.get(backend_url+'/calculate/sorted');
       setEmployees(res.data);
+      console.log(res);
     } catch (error) {
       console.log(error);
     }

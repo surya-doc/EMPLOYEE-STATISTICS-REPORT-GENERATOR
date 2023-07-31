@@ -36,6 +36,10 @@ import PasswordUpdate from './Components/Update/PasswordUpdate';
 import GuardedRoute from './Components/GuardedRoute/GuardedRoute';
 import AdminLogin from './Components/Admin/AdminLogin';
 import Admin from './Components/Admin/Admin';
+import ErrorPage from './Components/Error/ErrorPage';
+import HrUpdate from './Components/Update/HrUpdate';
+import MentorUpdate from './Components/Update/MentorUpdate';
+import MemberUpdate from './Components/Update/MemberUpdate';
 function App() {
   return (
     <div className="App">
@@ -47,7 +51,6 @@ function App() {
 
         <Route path='/signup/employee' element={<EmpSignup />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/update' element={<PersonalUpdate />} />
         <Route path='/update/password' element={<PasswordUpdate />} />
         <Route path='/admin/login' element={<AdminLogin />} />
 
@@ -64,6 +67,9 @@ function App() {
           {/* private route */}
           <Route path='/manage' element={<GuardedRoute type={"hr"} />} >
             <Route path='/manage' element={<Manage />} />
+          </Route>
+          <Route path='/hr/update' element={<GuardedRoute type={"hr"} />} >
+            <Route path='/hr/update' element={<HrUpdate />} />
           </Route>
           <Route path='/manage/createteam' element={<GuardedRoute type={"hr"} />} >
             <Route path='/manage/createteam' element={<CreateTeam />} />
@@ -107,6 +113,9 @@ function App() {
           <Route path='/mentorfeedback' element={<GuardedRoute type={"mentor"} />} >
             <Route path='/mentorfeedback' element={<MentorFeedbackOptions />} />
           </Route>
+          <Route path='/mentor/update' element={<GuardedRoute type={"mentor"} />} >
+            <Route path='/mentor/update' element={<MentorUpdate />} />
+          </Route>
           <Route path='/mentorfeedback/team' element={<GuardedRoute type={"mentor"} />} >
             <Route path='/mentorfeedback/team' element={<MentorTeamFeedback />} />
           </Route>
@@ -125,12 +134,17 @@ function App() {
           <Route path='/peerfeedback' element={<GuardedRoute type={"member"} />} >
             <Route path='/peerfeedback' element={<PeerFeedbackOptions />} />
           </Route>
+          <Route path='/employee/update' element={<GuardedRoute type={"member"} />} >
+            <Route path='/employee/update' element={<MemberUpdate />} />
+          </Route>
           <Route path='/feedback/peer' element={<GuardedRoute type={"member"} />} >
             <Route path='/feedback/peer' element={<Peerfeedback />} />
           </Route>
           <Route path='/employee/statistics' element={<GuardedRoute type={"member"} />} >
             <Route path='/employee/statistics' element={<EmployeeStat />} />
           </Route>
+
+          <Route path='*' element={<ErrorPage />} />
       </Routes>
     </div>
   );
