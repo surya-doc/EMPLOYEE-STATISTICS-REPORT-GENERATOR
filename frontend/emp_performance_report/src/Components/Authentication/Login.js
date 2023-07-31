@@ -35,8 +35,8 @@ function Login() {
         if(res.status === 200){
           const res = await axios.post(backend_url+'/employeeDetail/byemail', {email: email}, {
             headers: {
-              'Authorization': `Bearer ${token}`, // Set the JWT token in the Authorization header
-              'Content-Type': 'application/json', // Set the content type to JSON, adjust as needed
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
             }
           });
             localStorage.setItem("email", res.data.email);
@@ -115,7 +115,7 @@ async function validateOtp(event){
                   <div className='my-4'>
                       <input className='input border-b-[1px] pb-2 w-full' type="email" style={{outline: "none"}} placeholder='enter email' onChange={(event) => setEmail(event.target.value)}/>
                   </div>
-                  <div className='flex pb-2 my-4 relative' >
+                  <div className='flex pb-2 mt-8 relative' >
                   <div className='flex items-center gap-2 w-full'>
                       <input className='input border-b-[1px] w-full' style={{outline: "none"}} required type={`${password1 ? 'text' : 'password'}`} placeholder="Enter password" onChange={(event) => setPassword(event.target.value)}/>
                   </div>
@@ -125,7 +125,7 @@ async function validateOtp(event){
                   }
                   </div>
                   </div>
-                  <div onClick={() => setForgotPassword(true)}>Forgot password</div>
+                  <div className='text-sm cursor-pointer text-[#3498DB]' onClick={() => setForgotPassword(true)}>Forgot password?</div>
                   <button type='submit' className='text-sm bg-[#A62868] w-20 py-1 text-[#FFF] rounded-sm mx-auto'>Submit</button>
               </form>
             </div>

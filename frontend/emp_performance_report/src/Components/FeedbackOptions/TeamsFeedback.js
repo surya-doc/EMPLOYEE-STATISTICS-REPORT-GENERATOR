@@ -81,11 +81,15 @@ import TeamStat from '../TeamStat/TeamStat';
           tab === 'members' ? 
           <div className="members flex flex-col items-center">
               {
-                  employees.map((emp) => {
+                  employees.length !== 0 ? employees.map((emp) => {
                       return <div>
                           <HrFeedbackCard employee={emp} team={location.state} />
                       </div>
                   })
+                  :
+                  <div>
+                    No member in this team.
+                  </div>
               }
           </div>
           :

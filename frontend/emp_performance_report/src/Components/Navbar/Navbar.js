@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { backend_url } from '../../BackendRoute';
 import { getapiCall } from '../APICall/apiget';
 import jwtDecode from 'jwt-decode';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 function Navbar() {
   const[stat, setStat] = useState(false);
@@ -21,7 +22,6 @@ function Navbar() {
     const token = localStorage.getItem('token');
     var type = jwtDecode(token);
     type = type.role[0].authority
-    console.log(type);
     if(type === "member"){
       navigate("/peerfeedback");
     }
@@ -51,10 +51,7 @@ function Navbar() {
     try {
       const url = `${backend_url}/employeeDetail/${id}`;
       const res = await getapiCall(url, token);
-
-      console.log(res);
       if(res.status === 200 && res.data.role === "hr"){
-        console.log("*")
         setRole(res.data.role);
       }
       else if(res.status === 200 && res.data.role === "member"){
@@ -72,6 +69,24 @@ function Navbar() {
         localStorage.removeItem("name");
         // navigate('/login');
       }
+    }
+  }
+
+  async function updateProfile(){
+    try {
+      const url = `${backend_url}/employeeDetail/${id}`;
+      const res = await getapiCall(url, token);
+      if(res.data.role === 'hr'){
+        navigate('/hr/update')
+      }
+      else if(res.data.role === 'mentor'){
+        navigate('/mentor/update')
+      }
+      else if(res.data.role === 'member'){
+        navigate('/employee/update')
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -99,22 +114,28 @@ function Navbar() {
             <div className='py-2 hover:bg-[#F3F3F3] px-2 cursor-pointer' onClick={() => navigate('/signup/hr')}>Signup as HR</div>
           </div>
         </div>
-        <div className={`account relative ${isLoggedIn ? 'block' : 'hidden'} bg-[#A62868] w-8 h-8 flex items-center justify-center rounded-full text-[#FFF] text-sm cursor-pointer`}>
-          <h4 className='uppercase' onClick={() => setProfile(!profile)}>{name?.substring(0, 2)}</h4>
-          <div className={`absolute ${profile ? 'block' : 'hidden'} bg-[#FFF] top-10 text-[#000000] py-4 px-4 shadow-md`} style={{zIndex: 999}}>
-            <p className='py-2 border-b-[1px] min-w-[8rem]'>{localStorage.getItem('name')}</p>
-            <p className='py-2 border-b-[1px] min-w-[8rem]'>{localStorage.getItem('email')}</p>
-            <p className='py-2 border-b-[1px] min-w-[8rem]'>emp id: {localStorage.getItem('id')}</p>
-            <div className='flex'>
-              <div className={`mx-auto w-full flex`}>
-                <button className='bg-[#A62868] py-1 px-2 mt-4 mb-2 mx-auto text-[#FFF] rounded-sm' onClick={() => navigate("/update")}>Update</button>
-              </div>
-              <div className='mx-auto w-full flex'>
-                <button className='bg-[#A62868] py-1 px-2 mt-4 mb-2 mx-auto text-[#FFF] rounded-sm' onClick={() => logOut()}>Logout</button>
+          <OutsideClickHandler
+          onOutsideClick={() => {
+            setProfile(false)
+          }}
+          >
+        <div className={`account relative ${isLoggedIn ? 'block' : 'hidden'} bg-[#A62868] w-8 h-8 flex items-center justify-center rounded-full text-[#FFF] text-sm cursor-pointer`} onClick={() => setProfile(!profile)}>
+          <h4 className='uppercase'>{name?.substring(0, 2)}</h4>
+            <div className={`absolute ${profile ? 'block' : 'hidden'} bg-[#FFF] top-10 text-[#000000] py-4 px-4 shadow-md`} style={{zIndex: 999}}>
+              <p className='py-2 border-b-[1px] min-w-[8rem]'>{localStorage.getItem('name')}</p>
+              <p className='py-2 border-b-[1px] min-w-[8rem]'>{localStorage.getItem('email')}</p>
+              <p className='py-2 border-b-[1px] min-w-[8rem]'>emp id: {localStorage.getItem('id')}</p>
+              <div className='flex'>
+                <div className={`mx-auto w-full flex`}>
+                  <button className='bg-[#A62868] py-1 px-2 mt-4 mb-2 mx-auto text-[#FFF] rounded-sm' onClick={() => updateProfile()}>Update</button>
+                </div>
+                <div className='mx-auto w-full flex'>
+                  <button className='bg-[#A62868] py-1 px-2 mt-4 mb-2 mx-auto text-[#FFF] rounded-sm' onClick={() => logOut()}>Logout</button>
+                </div>
               </div>
             </div>
-          </div>
         </div>
+          </OutsideClickHandler>
         <div className={`feedback ${isLoggedIn ? 'block' : 'hidden'} cursor-pointer hover:text-[#A62868]`} onClick={() => checkFeedbacker()}>
           Feedback
         </div>
